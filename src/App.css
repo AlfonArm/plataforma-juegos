@@ -36,3 +36,13 @@
     transform: rotate(360deg);
   }
 }
+
+/* configuraciones de display */
+
+.invisible {
+  display: none;
+}
+
+.bloque {
+  display: block;
+}
