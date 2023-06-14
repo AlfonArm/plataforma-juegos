@@ -16,9 +16,6 @@ Propongo no poner un boton de buscar, sino que se actualice solo
 let elem = 0;
 let cantTotal = 100;
 let lista = [];
-let lista2 = [];
-let lista3 = [];
-let execute;
 
 const cargarMas = (elem) => {
     lista = [];
@@ -61,7 +58,7 @@ const chargeData = () => {
     ) 
 }
 
-const listaUpdate = (lista, elem) => {
+const listaUpdate = () => {
         let lista2;
         lista2 = cargarMas(elem++);
         // esto si lista es una variable con globalidad, cosa que no es :P
@@ -87,7 +84,8 @@ const Generos = () => {
             <p>Lista de géneros:</p>
             {listaUpdate(lista, elem)}
             <ul>
-                {scroll() ? listaUpdate(lista, elem): null}
+                {scroll() ? cargarMas(elem++) : null}
+                {lista.map (chargeData())}
             </ul>
         </div>
     );
