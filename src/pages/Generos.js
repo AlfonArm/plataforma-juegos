@@ -77,7 +77,6 @@ const Generos = () => {
                 <p className = {nombre.length == 0 ? "invisible" : "bloque"}>Mostrando resultados para: {nombre}</p>
             </div>
             <p>Lista de géneros:</p>
-            {lista = lista.concat(cargarMas(elem++))}
             <ul>
                 <div>
                 {lista.map ((genero, indice) => {
