@@ -1,5 +1,7 @@
 import React, {useState} from 'react';
-import Navegacion from '../components/Navegacion';
+import Navegacion from '../../components/HeaderComponent';
+import Scroll from '../scroll'
+
 // acá habría que importar los estilos
 
 /*
@@ -17,6 +19,8 @@ let elem = 0;
 let cantTotal = 100;
 let lista = [];
 
+// esto es algo para probar la carga de scroll, la cuál todavía no funciona. Después se pondría en la lista los
+// elementos a cargar de 20 en 20.
 const cargarMas = (elem) => {
     lista = [];
     for (let i = elem*20; i < (elem+1)*20; i++) lista.push(/*acá iría la función que usa axios: obtenerGeneros(i), que haría una conexión con la api*/i);
@@ -24,58 +28,13 @@ const cargarMas = (elem) => {
     return lista;
 };
 
-const scroll = () => {
-    window.addEventListener('scroll', function() {
-        // Obtener la altura total del documento, incluyendo el desplazamiento vertical
-        var documentHeight = document.documentElement.scrollHeight;
-      
-        // Obtener la altura visible de la ventana del navegador
-        var windowHeight = window.innerHeight;
-      
-        // Obtener la posición actual del desplazamiento vertical
-        var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-      
-        // Calcular la distancia restante para llegar al final de la página
-        var remainingDistance = documentHeight - (windowHeight + scrollTop);
-      
-        // Verificar si se ha llegado al final de la página
-        if (remainingDistance <= 0) {
-          // Aquí puedes realizar las acciones que desees cuando se llegue al final de la página
-          return true
-        } else {
-            return false
-        }
-      });
-}
-
-/*
-const chargeData = () => {
-    {lista.map ((genero, indice) => {
-        return (
-            <li key={indice}>{genero}</li>
-        );
-    })
-}}
-
-*/
-
 
 
 const Generos = () => {
-    const [nombre, setName] = useState("");
-    
-    const changeName = (newName) => {
-        setName(newName);
-    };
-
     return (
         <div>
             <Navegacion></Navegacion>
             {lista = []}
-            <div>
-                <input type='text' onChange={e => changeName(e.target.value)}/>
-                <p className = {nombre.length == 0 ? "invisible" : "bloque"}>Mostrando resultados para: {nombre}</p>
-            </div>
             <p>Lista de géneros:</p>
             <ul>
                 <div>
