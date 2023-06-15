@@ -21,7 +21,7 @@ const cargarMas = (elem) => {
     lista = [];
     for (let i = elem*20; i < (elem+1)*20; i++) lista.push(/*acá iría la función que usa axios: obtenerGeneros(i), que haría una conexión con la api*/i);
     elem++;
-    return [lista, elem];
+    return lista;
 };
 
 const scroll = () => {
@@ -48,23 +48,18 @@ const scroll = () => {
       });
 }
 
+/*
 const chargeData = () => {
-    return (
-            <div>
-                <br></br>
-                <li key={indice}>{genero}</li>
-                <br></br>
-            </div>
-    ) 
-}
+    {lista.map ((genero, indice) => {
+        return (
+            <li key={indice}>{genero}</li>
+        );
+    })
+}}
 
-const listaUpdate = () => {
-        let lista2;
-        lista2 = cargarMas(elem++);
-        // esto si lista es una variable con globalidad, cosa que no es :P
-        lista = lista + lista2;
-        return chargeData();
-};
+*/
+
+
 
 const Generos = () => {
     const [nombre, setName] = useState("");
@@ -82,10 +77,26 @@ const Generos = () => {
                 <p className = {nombre.length == 0 ? "invisible" : "bloque"}>Mostrando resultados para: {nombre}</p>
             </div>
             <p>Lista de géneros:</p>
-            {listaUpdate(lista, elem)}
+            {lista = lista.concat(cargarMas(elem++))}
             <ul>
-                {scroll() ? cargarMas(elem++) : null}
-                {lista.map (chargeData())}
+                <div>
+                {lista.map ((genero, indice) => {
+                    return (
+                            <li key={indice}>{genero}</li>
+                    );
+                    })
+                }
+                </div>
+            </ul>
+            <ul>
+                {scroll() ? lista = lista + cargarMas(elem++) : null}
+                {// acá tendría que haber una función que compruebe si hay más y un op terneario que mapeé 
+                lista.map ((genero, indice) => {
+                    return (
+                            <li key={indice}>{genero}</li>
+                    );
+                    })
+                }
             </ul>
         </div>
     );
