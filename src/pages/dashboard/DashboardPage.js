@@ -1,6 +1,5 @@
-import React from 'react';
-import Navegacion from '../components/Navegacion';
-
+import Navegacion from '../../components/HeaderComponent';
+import React, {useState} from 'react';
 
 const Dashboard = () => {
     const [nombre, setName] = useState("");
@@ -8,7 +7,7 @@ const Dashboard = () => {
     const changeName = (newName) => {
         setName(newName);
     };
-    
+
     return (
         <div>
             <Navegacion></Navegacion>

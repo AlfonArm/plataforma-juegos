@@ -1,10 +1,10 @@
 import React from 'react';
-import Navegacion from '../components/Navegacion';
+import FooterComponent from '../../components/FooterComponent';
 
 const Plataformas = () => {
     return (
         <div>
-            <Navegacion></Navegacion>
+            <FooterComponent></FooterComponent>
             <p>Lista de Plataformas</p>
         </div>
     );

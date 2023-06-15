@@ -1,6 +1,6 @@
 import './App.css';
 
-import Dashboard from "../src/pages/Dashboard";
+import Dashboard from "../src/pages/dashboard/DashboardPage";
 import Generos from "../src/pages/generos/Generos";
 import Plataformas from "../src/pages/plataformas/Plataformas";
 
