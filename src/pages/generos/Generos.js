@@ -2,6 +2,7 @@ import Navegacion from '../../components/HeaderComponent';
 import Scroll from '../scroll'
 import Mapear from '../../components/Mapear'
 import cargarGeneros from './cargarGeneros';
+import Axios from '../../axios'
 
 // https://www.youtube.com/watch?v=m5yS-RsKGTw&ab_channel=FalconMasters
 
@@ -34,6 +35,7 @@ const conseguirUltimo = () => {
 const Generos = () => {
     return (
         <div>
+            {Axios()}
             <Navegacion></Navegacion>
             <p>Lista de géneros:</p>
             <ul>

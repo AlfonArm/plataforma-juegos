@@ -1,5 +1,6 @@
 import Navegacion from '../../components/HeaderComponent';
 import React, {useState} from 'react';
+import obtener from '../../axios'
 
 const Dashboard = () => {
     const [nombre, setName] = useState("");
@@ -10,6 +11,7 @@ const Dashboard = () => {
 
     return (
         <div>
+            {obtener('/generos/')}
             <Navegacion></Navegacion>
             <p>Página principal</p>
             <div>
