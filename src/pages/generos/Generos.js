@@ -1,7 +1,6 @@
 import Navegacion from '../../components/HeaderComponent';
-import Scroll from '../scroll'
+import Scroll from '../../components/scroll'
 import Mapear from '../../components/Mapear'
-import cargarGeneros from './cargarGeneros';
 import Axios from '../../axios'
 
 // https://www.youtube.com/watch?v=m5yS-RsKGTw&ab_channel=FalconMasters
@@ -15,22 +14,12 @@ En listaCompleta se guardarían los datos obtenidos de la API, los cuales se imp
 En lista voy a guardar los datos a mostrar, los cuales van a ser definidos por un contador
 Propongo no poner un boton de buscar, sino que se actualice solo
 */
-let listaCompleta = cargarGeneros();
+let listaCompleta;
 let paginado = 1;
 let tipo = "genero"
 
-
 // esto es algo para probar la carga de scroll, la cuál todavía no funciona. Después se pondría en la lista los
 // elementos a cargar de 20 en 20.
-
-const conseguirUltimo = () => {
-    const generosMostrados = document.querySelectorAll('.genero');
-    console.log(generosMostrados);
-    let ultimoGenero = generosMostrados[generosMostrados.length-1];
-    return ultimoGenero;
-}
-
-
 
 const Generos = () => {
     return (
@@ -39,9 +28,6 @@ const Generos = () => {
             <Navegacion></Navegacion>
             <p>Lista de géneros:</p>
             <ul>
-            <div>
-                {Mapear(tipo, listaCompleta)}
-            </div>
             </ul>
             <ul>
                 {
