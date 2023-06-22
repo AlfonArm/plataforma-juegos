@@ -1,6 +1,6 @@
 import Navegacion from '../../components/HeaderComponent';
 import React, {useState, useEffect} from 'react';
-import fetchUserData from '../../axios'
+import {fetchUserData, deleteUserData, modifyUserData, createData} from '../../axios'
 
 const Dashboard = () => {
     const [datos, setDatos] = useState([]);
@@ -40,6 +40,15 @@ const Dashboard = () => {
             datos.map(element => {
                 return(
                     <div class = 'bloque_info' key = {element.id}>
+                        <div class = 'interface'> {/* tiene float right y se muestra cuando hacemos hover*/}
+                            <img class ='interface_image' src = '../../styles/modify' onClick = {}/> 
+                            {/* hay 3 formas de hacerlo (investigar):
+                            - Tomar los elementos del div y modificarlos. No requiere cambiar el diseño
+                            - Hacer una ventana flotante donde se relllenen los datos
+                            - Enviar a otra página (el más fácil)
+                            */}
+                            <img class ='interface_image' src = '../../styles/delete' onClick = {}/>
+                        </div>
                         <img class='reducir_img' src={"data"+element.tipo_imagen+":;charset=utf8;base64"+element.imagen}/>
                         <div class = 'info_right'>
                             <p class = 'boldeable'>{element.nombre}</p>
