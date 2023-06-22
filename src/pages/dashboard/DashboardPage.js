@@ -1,19 +1,23 @@
 import Navegacion from '../../components/HeaderComponent';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import fetchUserData from '../../axios'
 
-let datos = [];
-let plataformas = [];
-let generos = [];
-let params = [];
 const Dashboard = () => {
+    const [datos, setDatos] = useState([]);
+    const [plataformas, setPlataformas] = useState([]);
+    const [generos, setGeneros] = useState([]);
     const [nombre, setName] = useState("");
     const [plataforma, setPlataform] = useState("");
     const [genero, setGender] = useState("");
-    const [orden, setOrder] = useState("");
-    setOrder('ascending');
+    const [orden, setOrder] = useState("ascending");
 
-    const [url, setUrl] = useState("");
+    useEffect (loadData, []);
+    useEffect (() => setDatos(fetchUserData("/juegos", nombre, plataforma, genero, orden)), [nombre, plataforma, genero, orden]);
+
+    function loadData () {
+        setGeneros(fetchUserData('/generos'));
+        setPlataformas(fetchUserData('/plataformas'));
+    }
     
     const changeName = (newName) => {
         setName(newName);
@@ -31,24 +35,9 @@ const Dashboard = () => {
         setOrder(newOrder);
     };
 
-    const updateValues = (newName, newPlataform, newGender, newOrder) => {
-        if (newName != nombre) changeName(newName);
-        if (newPlataform != plataforma) changePlataform(newPlataform);
-        if (newGender != genero) changeGender(newGender);
-        if (newOrder != orden) changeOrder(newOrder);
-        params = {
-            name: nombre,
-            idPlataform: plataforma,
-            idGender: genero
-        };
-        if (orden) params.ascending = true;
-        else params.ascending = false;
-        datos = fetchUserData('/juegos', params).data;
-    }
-
     const createList = () => {
         return (
-            datos.forEach(element => {
+            datos.map(element => {
                 return(
                     <div class = 'bloque_info' key = {element.id}>
                         <img class='reducir_img' src={"data"+element.tipo_imagen+":;charset=utf8;base64"+element.imagen}/>
@@ -78,15 +67,11 @@ const Dashboard = () => {
 
     return (
         <div>
-            {datos = fetchUserData('/juegos', {})}
-            {console.log(datos)}
-            {plataformas = fetchUserData('/plataformas', {}).data}
-            {generos = fetchUserData('/generos', {}).data}
             <Navegacion></Navegacion>
             <div class = "busqueda_header">
                 <div>
                     <label>Buscar:</label>
-                    <input type='text' onChange={e => updateValues(e.changeName, plataforma, genero, orden)}/>
+                    <input type='text' onChange={e => changeName(e.changeName)}/>
                     <p className = {nombre.length == 0 ? "invisible" : "bloque"}>Mostrando resultados para: {nombre}</p>
                 </div>
                 <div action = "index.php" id = "info_busqueda" class = "busqueda_header">
@@ -97,7 +82,7 @@ const Dashboard = () => {
                             {
                                 generos.map( (genKey, gen) => {
                                     return (
-                                        <option key = {genKey} onChange={e => updateValues(nombre, plataforma, e.changeGender, orden)}>{gen}</option>
+                                        <option key = {genKey} onChange={e => changeGender(e.changeGender)}>{gen}</option>
                                     )
                                 })
                             }
@@ -110,21 +95,17 @@ const Dashboard = () => {
                             {
                                 plataformas.map( (platKey, plat) => {
                                     return (
-                                        <option onChange={e => updateValues(nombre, e.changePlataform, genero, orden)} key = {platKey}>{plat}</option>
+                                        <option onChange={e => changePlataform(e.changePlataform)} key = {platKey}>{plat}</option>
                                     )
                                 })
                             }
                         </select><br></br>
-                        <img className='ascending_or' key={orden} src={'../../styles/'+orden} onClick={orden == 'ascending' ? changeOrder ('descending') : changeOrder ('ascending')}/>
                     </div>
                     <div>
                         <label>Orden:</label>
-                        {/* reemplazar por un boton que sea interactivo de una flecha abajo o arriba*/}
-                        <select id = "header_orden" name = "orden">
-                            <option selected value = '1'>Ascendente</option>
-                            <option value = '2'>Descendente</option>
-                        </select>
+                        <img className='ascending_or' key={orden} src={'../../styles/'+orden} onClick={orden == 'ascending' ? changeOrder ('descending') : changeOrder ('ascending')}/>
                     </div>
+                    {/* pendiente a sacar*/}
                     <div>
                         <input type = "submit" value = "Buscar" id = "busqueda_juego" name = "buscar"/>
                     </div>
