@@ -1,10 +1,10 @@
 import Axios from "axios";
 import dir from './constants/api';
 
-const fetchUserData = (page, request) => {     
+const fetchUserData = async (page, request) => {     
     try {       
         console.log (dir + page);
-        const response = Axios.get(dir + page, request);       
+        const response = await Axios.get(dir + page, request);       
         console.log('respuesta de la api', response);
         return response
     } catch (error) {       
