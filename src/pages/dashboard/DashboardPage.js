@@ -1,8 +1,11 @@
-import Navegacion from '../../components/HeaderComponent';
-import React, {useState, useEffect} from 'react';
-import {fetchUserData, deleteUserData, modifyUserData, createData} from '../../axios'
+import HeaderComponent from '../../components/HeaderComponent';
+import FooterComponent from '../../components/FooterComponent'
+import navBarComponent from '../../components/NavBarComponent'
+import {useState, useEffect} from 'react';
+import fetchUserData from '../../axios/fetchUserData'
 
 const Dashboard = () => {
+    
     const [datos, setDatos] = useState([]);
     const [plataformas, setPlataformas] = useState([]);
     const [generos, setGeneros] = useState([]);
@@ -11,14 +14,6 @@ const Dashboard = () => {
     const [genero, setGender] = useState("");
     const [orden, setOrder] = useState("ascending");
 
-    useEffect (loadData, []);
-    useEffect (() => setDatos(fetchUserData("/juegos", nombre, plataforma, genero, orden)), [nombre, plataforma, genero, orden]);
-
-    function loadData () {
-        setGeneros(fetchUserData('/generos'));
-        setPlataformas(fetchUserData('/plataformas'));
-    }
-    
     const changeName = (newName) => {
         setName(newName);
     };
@@ -35,19 +30,23 @@ const Dashboard = () => {
         setOrder(newOrder);
     };
 
+    useEffect (() => {setGeneros((fetchUserData('/generos')))}, []);
+    useEffect (() => {setPlataformas((fetchUserData('/plataformas')))}, []);
+    useEffect (() => {setDatos ((fetchUserData("/juegos", [nombre, plataforma, genero, orden])))}, [nombre, plataforma, genero, orden]);
+
     const createList = () => {
         return (
             datos.map(element => {
                 return(
                     <div class = 'bloque_info' key = {element.id}>
                         <div class = 'interface'> {/* tiene float right y se muestra cuando hacemos hover*/}
-                            <img class ='interface_image' src = '../../styles/modify' onClick = {}/> 
+                            <img class ='interface_image' src = '../../styles/modify'/> 
                             {/* hay 3 formas de hacerlo (investigar):
                             - Tomar los elementos del div y modificarlos. No requiere cambiar el diseño
                             - Hacer una ventana flotante donde se relllenen los datos
                             - Enviar a otra página (el más fácil)
                             */}
-                            <img class ='interface_image' src = '../../styles/delete' onClick = {}/>
+                            <img class ='interface_image' src = '../../styles/delete'/>
                         </div>
                         <img class='reducir_img' src={"data"+element.tipo_imagen+":;charset=utf8;base64"+element.imagen}/>
                         <div class = 'info_right'>
@@ -76,12 +75,11 @@ const Dashboard = () => {
 
     return (
         <div>
-            <Navegacion></Navegacion>
             <div class = "busqueda_header">
                 <div>
                     <label>Buscar:</label>
                     <input type='text' onChange={e => changeName(e.changeName)}/>
-                    <p className = {nombre.length == 0 ? "invisible" : "bloque"}>Mostrando resultados para: {nombre}</p>
+                    <p className = {nombre.length === 0 ? "invisible" : "bloque"}>Mostrando resultados para: {nombre}</p>
                 </div>
                 <div action = "index.php" id = "info_busqueda" class = "busqueda_header">
                     <div>
@@ -112,17 +110,13 @@ const Dashboard = () => {
                     </div>
                     <div>
                         <label>Orden:</label>
-                        <img className='ascending_or' key={orden} src={'../../styles/'+orden} onClick={orden == 'ascending' ? changeOrder ('descending') : changeOrder ('ascending')}/>
-                    </div>
-                    {/* pendiente a sacar*/}
-                    <div>
-                        <input type = "submit" value = "Buscar" id = "busqueda_juego" name = "buscar"/>
+                        <img className='ascending_or' key={orden} src={'../../styles/'+orden} onClick={orden === 'ascending' ? changeOrder ('descending') : changeOrder ('ascending')}/>
                     </div>
                 </div>
-                <button  class = "boton_bonito" onclick = "agregarJuego()" role="button">Agregar</button>
+                <button  class = "boton_bonito" onclick = "agregarJuego()">Agregar</button>
             </div>
             <div class = "lista">
-                {datos.length == 0 ? notFound() : createList()}
+                {datos.length === 0 ? notFound() : createList()}
             </div>
         </div>
     );

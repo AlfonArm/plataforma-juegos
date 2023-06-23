@@ -1,45 +1,58 @@
-import Navegacion from '../../components/HeaderComponent';
-import Scroll from '../../components/scroll'
-import Mapear from '../../components/Mapear'
-import Axios from '../../axios'
-
-// https://www.youtube.com/watch?v=m5yS-RsKGTw&ab_channel=FalconMasters
-
-/*
-Paso a explicar un poco mi idea con respecto a cómo hacer la tabla de géneros, plataformas y, consecuentemente, de videojuegos. Después se verá su compatibilidad según
-cómo se carguen los enlaces a medida que se modifique la barra de búsqueda (aspecto posible con el router-dom):
-Para hacer la página un poco más llevadera e "inteligente", se me ocurrió que se pueden no cargar todos los géneros de golpe, sino ir de a bloques de 20 o 50 (que al fin y al
-cabo no representan muchos dato y todo eso). A medida que bajamos, cargamos bloques.
-En listaCompleta se guardarían los datos obtenidos de la API, los cuales se importan con axios si no me equivoco
-En lista voy a guardar los datos a mostrar, los cuales van a ser definidos por un contador
-Propongo no poner un boton de buscar, sino que se actualice solo
-*/
-let listaCompleta;
-let paginado = 1;
-let tipo = "genero"
-
-// esto es algo para probar la carga de scroll, la cuál todavía no funciona. Después se pondría en la lista los
-// elementos a cargar de 20 en 20.
+import HeaderComponent from '../../components/HeaderComponent';
+import FooterComponent from '../../components/FooterComponent'
+import GeneroDelete from "./GeneroDelete";
+import GeneroModify from "./GeneroModify";
+import navBarComponent from '../../components/NavBarComponent'
+import {useState, useEffect} from 'react';
+import fetchUserData from '../../axios/fetchUserData'
+import deleteUserData from '../../axios/deleteUserData'
+import modifyUserData from '../../axios/modifyUserData'
+import createData from '../../axios/createData'
 
 const Generos = () => {
+    const [generos, setGeneros] = useState([]);
+    const [modificando, changeModify] = useState(false);
+    useEffect (() => setGeneros((fetchUserData('/generos').data)), []);
+
+
+    const noExiste = () => {
+        return (
+            <div>
+                <p>No existe</p>
+            </div>
+        )
+    }
+
+    function checkDependiencesAndPopUp (id) {
+        try {
+            deleteUserData('/generos/'+id);
+            alert ("El elemento se ha borrado satisfactoriamente")
+        } catch (error) {
+            alert (error);
+        }
+    }
+
     return (
         <div>
-            {Axios()}
-            <Navegacion></Navegacion>
-            <p>Lista de géneros:</p>
-            <ul>
-            </ul>
-            <ul>
-                {
-                /*Observador.observe(ultElem) ? Mapear("genero", listaCompleta.slice[20*paginado++, 20*paginado-1]) : null
-                lo que debería pasar acá es que la el primer mapeo sea de 20 páginas y aumente el paginado.
-                Por alguna razón no se envía si no es la lista completa, pero bueno.
-                Se me ocurre que simplemente podemos enviar la función de mapear 20 elementos con una lista de
-                20 elementos al observador, que ejecutaría tales operaciones.
-                
-                */
+            <HeaderComponent/>
+            <navBarComponent/>
+            <div>
+                {console.log('Respuesta: '+generos+'. Datos: '+generos.data+'. Status: '+generos.status)}
+                {((generos === null)&&(Array.isArray(generos))&&(generos.length > 0)) ? noExiste() :
+                    generos.map ( (genero) => {
+                        return (
+                            <div key={genero.id}>
+                                <div className='interface'>
+                                    <img class ='interface_image' src = '../../styles/modify' onClick={modificando ? changeModify(false) : changeModify(true)}/>
+                                    <img class ='interface_image' src = '../../styles/delete' onClick={checkDependiencesAndPopUp(genero.id)}/>
+                                </div>
+                                <p>{genero.nombre}</p>
+                            </div>
+                        )
+                    })
                 }
-            </ul>
+            </div>
+            <FooterComponent/>
         </div>
     );
 };

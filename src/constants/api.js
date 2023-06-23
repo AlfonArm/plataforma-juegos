@@ -1,3 +1,3 @@
-const dir = 'https://localhost:8000';
+const dir = 'http://localhost:8000';
 
 export default dir;
