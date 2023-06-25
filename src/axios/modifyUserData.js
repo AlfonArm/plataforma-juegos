@@ -9,3 +9,5 @@ const modifyUserData = async (page, request) => {
         console.error(error);     
     }   
 };
+
+export default modifyUserData

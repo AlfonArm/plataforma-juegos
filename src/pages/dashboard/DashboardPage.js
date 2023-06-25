@@ -75,6 +75,8 @@ const Dashboard = () => {
 
     return (
         <div>
+            <HeaderComponent/>
+            <navBarComponent/>
             <div class = "busqueda_header">
                 <div>
                     <label>Buscar:</label>
@@ -118,6 +120,7 @@ const Dashboard = () => {
             <div class = "lista">
                 {datos.length === 0 ? notFound() : createList()}
             </div>
+            <FooterComponent/>
         </div>
     );
 };

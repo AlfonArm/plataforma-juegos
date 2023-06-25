@@ -1,29 +1,27 @@
 import HeaderComponent from '../../components/HeaderComponent';
 import FooterComponent from '../../components/FooterComponent'
-import GeneroDelete from "./GeneroDelete";
-import GeneroModify from "./GeneroModify";
-import navBarComponent from '../../components/NavBarComponent'
+import NavBarComponent from '../../components/NavBarComponent'
 import {useState, useEffect} from 'react';
 import fetchUserData from '../../axios/fetchUserData'
 import deleteUserData from '../../axios/deleteUserData'
-import modifyUserData from '../../axios/modifyUserData'
-import createData from '../../axios/createData'
+import api from '../../constants/api'
 
 const Generos = () => {
     const [generos, setGeneros] = useState([]);
-    const [modificando, changeModify] = useState(false);
     useEffect (() => setGeneros((fetchUserData('/generos').data)), []);
+    let pointer;
 
-
+    // lo que devuelve si la lista está vacía (implementar poner un error de ser necesario)
     const noExiste = () => {
         return (
             <div>
-                <p>No existe</p>
+                <p>No hay generos</p>
             </div>
         )
     }
 
-    function checkDependiencesAndPopUp (id) {
+    // función de borrado
+    function checkDependiencesAndPopUp (id, nombre = '') {
         try {
             deleteUserData('/generos/'+id);
             alert ("El elemento se ha borrado satisfactoriamente")
@@ -32,19 +30,22 @@ const Generos = () => {
         }
     }
 
+    // cuerpo de página
     return (
         <div>
             <HeaderComponent/>
-            <navBarComponent/>
+            <NavBarComponent/>
             <div>
+                <img src='../../styles/form.png' onClick={agregar ? changeAdd(false) : changeAdd(true)}/>
+                {agregar ? openForm() : null}
                 {console.log('Respuesta: '+generos+'. Datos: '+generos.data+'. Status: '+generos.status)}
                 {((generos === null)&&(Array.isArray(generos))&&(generos.length > 0)) ? noExiste() :
                     generos.map ( (genero) => {
                         return (
                             <div key={genero.id}>
                                 <div className='interface'>
-                                    <img class ='interface_image' src = '../../styles/modify' onClick={modificando ? changeModify(false) : changeModify(true)}/>
-                                    <img class ='interface_image' src = '../../styles/delete' onClick={checkDependiencesAndPopUp(genero.id)}/>
+                                    <img className ='interface_image' src = '../../styles/modify' onClick={location.href = api+'/generos/edit:'+genero.id}/>
+                                    <img className ='interface_image' src = '../../styles/delete' onClick={checkDependiencesAndPopUp(genero.id, genero.nombre)}/>
                                 </div>
                                 <p>{genero.nombre}</p>
                             </div>

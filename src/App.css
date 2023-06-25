@@ -100,6 +100,12 @@ header p {
   float: right;
 }
 
+.barra_inicio {
+	display: inline;
+	background-color:#0F1618;
+	text-align: center;
+}
+
 /* Este es el botón que te lleva al altajuego */
 .boton_bonito {
   max-width: 120px;
