@@ -1,4 +1,4 @@
-const DashboardModify = () => {
+const NewPage = () => {
     return (
         <div>
             <p></p>
@@ -6,4 +6,4 @@ const DashboardModify = () => {
     )
 }
 
-export default DashboardModify
+export default NewPage;
