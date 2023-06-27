@@ -1,14 +1,14 @@
 import HeaderComponent from '../../components/HeaderComponent';
 import FooterComponent from '../../components/FooterComponent'
-import navBarComponent from '../../components/NavBarComponent'
+import NavBarComponent from '../../components/NavBarComponent'
 import {useState, useEffect} from 'react';
 import {fetchUserData} from "../../axios/fetchUserData";
 
 const Dashboard = () => {
     
-    const [datos, setDatos] = useState([]);
-    const [plataformas, setPlataformas] = useState([]);
-    const [generos, setGeneros] = useState([]);
+    const [datos, setDatos] = useState();
+    const [plataformas, setPlataformas] = useState();
+    const [generos, setGeneros] = useState();
     const [nombre, setName] = useState("");
     const [plataforma, setPlataform] = useState("");
     const [genero, setGender] = useState("");
@@ -34,16 +34,16 @@ const Dashboard = () => {
     }
 
     const getPlataformas = async () => {
-        const data = await fetchUserData('/generos');
+        const data = await fetchUserData('/plataformas');
         if (data) {
-            setGeneros(data);
+            setPlataformas(data);
         }
     }
 
-    const getJuegos = async (params) => {
-        const data = await fetchUserData('/generos', params);
+    const getJuegos = async (params = "") => {
+        const data = await fetchUserData('/juegos', params);
         if (data) {
-            setGeneros(data);
+            setDatos(data);
         }
     }
 
@@ -59,8 +59,9 @@ const Dashboard = () => {
         setPlataform(newPlataform);
     };
     
-    const changeOrder = (newOrder) => {
-        setOrder(newOrder);
+    const changeOrder = () => {
+        if (orden == 'descending') setOrder('ascending')
+        else setOrder('descending')
     };
 
     const createList = () => {
@@ -95,23 +96,25 @@ const Dashboard = () => {
         return (
             <div class = 'flex justify_center'>
                 <div>
-                    <img src = 'images/not_found.png' id = 'not_found'/>
+                    <img src = '../../styles/not_found.png' id = 'not_found'/>
                     <p>No se han encontrado resultados</p>
                 </div>
             </div>
         )
     }
 
-    function agregarJuego () {
-        return null
+    function cargarDatos () {
+        if (!plataformas) getPlataformas();
+        if (!generos) getGeneros();
+        if (!datos) getJuegos();
+
     }
 
-    console.log(generos);
     return (
         <div>
             <HeaderComponent/>
-            <navBarComponent/>
-            {/*
+            <NavBarComponent/>
+            {cargarDatos()}
             <div class = "busqueda_header">
                 <div>
                     <label>Buscar:</label>
@@ -146,15 +149,13 @@ const Dashboard = () => {
                         </select><br></br>
                     </div>
                     <div>
-                        <label>Orden:</label>
-                        <img className='ascending_or' key={orden} src={'../../styles/'+orden} onClick={orden === 'ascending' ? changeOrder ('descending') : changeOrder ('ascending')}/>
+                        <img className='ascending_or' src={'../../styles/'+orden} onClick={() => changeOrder ()}/>
                     </div>
                 </div>
-                <button  class = "boton_bonito" onClick={agregarJuego}>Agregar</button>
+                <button  class = "boton_bonito" href = "/new">Agregar</button>
             </div>
-            */}
             <div class = "lista">
-                {datos.length === 0 ? notFound() : createList()}
+                {datos ? createList() : notFound()}
             </div>
             <FooterComponent/>
         </div>

@@ -3,8 +3,9 @@ import Axios from 'axios';
 
 export const fetchUserData = async (page, request = '') => {
     try {
-        debugger;
-        const response = await Axios.get(dir + page, request);     
+        console.log ('Entré')
+        const response = await Axios.get(dir + page, request);
+        console.log('Respuesta:' +response)
         return response.data
     } catch (error) {       
         console.error(error);     
