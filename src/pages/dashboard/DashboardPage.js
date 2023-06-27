@@ -2,7 +2,7 @@ import HeaderComponent from '../../components/HeaderComponent';
 import FooterComponent from '../../components/FooterComponent'
 import navBarComponent from '../../components/NavBarComponent'
 import {useState, useEffect} from 'react';
-import fetchUserData from '../../axios/fetchUserData'
+import {fetchUserData} from "../../axios/fetchUserData";
 
 const Dashboard = () => {
     
@@ -13,6 +13,19 @@ const Dashboard = () => {
     const [plataforma, setPlataform] = useState("");
     const [genero, setGender] = useState("");
     const [orden, setOrder] = useState("ascending");
+
+    useEffect (() => {
+        if (!generos) getGeneros()
+        }, []);
+ //   useEffect (() => {setPlataformas(fetchUserData('/plataformas'))}, []);
+ //   useEffect (() => {setDatos (fetchUserData("/juegos", [nombre, plataforma, genero, orden]))}, [nombre, plataforma, genero, orden]);
+
+    const getGeneros = async () => {
+        const data = await fetchUserData('/generos');
+        if (data) {
+            setGeneros(data);
+        }
+    }
 
     const changeName = (newName) => {
         setName(newName);
@@ -29,10 +42,6 @@ const Dashboard = () => {
     const changeOrder = (newOrder) => {
         setOrder(newOrder);
     };
-
-    useEffect (() => {setGeneros((fetchUserData('/generos')))}, []);
-    useEffect (() => {setPlataformas((fetchUserData('/plataformas')))}, []);
-    useEffect (() => {setDatos ((fetchUserData("/juegos", [nombre, plataforma, genero, orden])))}, [nombre, plataforma, genero, orden]);
 
     const createList = () => {
         return (
@@ -73,6 +82,11 @@ const Dashboard = () => {
         )
     }
 
+    function agregarJuego () {
+        return null
+    }
+
+    console.log(generos);
     return (
         <div>
             <HeaderComponent/>
@@ -83,15 +97,16 @@ const Dashboard = () => {
                     <input type='text' onChange={e => changeName(e.changeName)}/>
                     <p className = {nombre.length === 0 ? "invisible" : "bloque"}>Mostrando resultados para: {nombre}</p>
                 </div>
-                <div action = "index.php" id = "info_busqueda" class = "busqueda_header">
+                <div id = "info_busqueda" className = "busqueda_header">
+                    {/*
                     <div>
                         <label>Género:</label>
-                        <select id = "header_genero" name = "genero">
+                        <select id = "header_genero">
                             <option selected value = "not_valid">Seleccionar género</option>
                             {
-                                generos.map( (genKey, gen) => {
+                                generos && generos.map( (gen, genKey) => {
                                     return (
-                                        <option key = {genKey} onChange={e => changeGender(e.changeGender)}>{gen}</option>
+                                        <option key={genKey} onChange={(e) => changeGender(e.changeGender)}>{gen.nombre}</option>
                                     )
                                 })
                             }
@@ -99,27 +114,29 @@ const Dashboard = () => {
                     </div>
                     <div>
                         <label>Plataforma:</label>
-                        <select id = "header_plataforma" name = "plataforma">
+                        <select id = "header_plataforma">
                             <option selected value = "not_valid">Seleccionar plataforma</option>
                             {
-                                plataformas.map( (platKey, plat) => {
+                                plataformas.map( (plat, platKey) => {
                                     return (
-                                        <option onChange={e => changePlataform(e.changePlataform)} key = {platKey}>{plat}</option>
+                                        <option onChange={(e) => changePlataform(e.changePlataform)} key = {platKey}>{plat.nombre}</option>
                                     )
                                 })
                             }
                         </select><br></br>
                     </div>
+                    */}
                     <div>
                         <label>Orden:</label>
                         <img className='ascending_or' key={orden} src={'../../styles/'+orden} onClick={orden === 'ascending' ? changeOrder ('descending') : changeOrder ('ascending')}/>
                     </div>
                 </div>
-                <button  class = "boton_bonito" onclick = "agregarJuego()">Agregar</button>
+                <button  class = "boton_bonito" onClick={agregarJuego}>Agregar</button>
             </div>
-            <div class = "lista">
+            {/*<div class = "lista">
                 {datos.length === 0 ? notFound() : createList()}
             </div>
+            */}
             <FooterComponent/>
         </div>
     );

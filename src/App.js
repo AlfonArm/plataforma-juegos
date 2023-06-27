@@ -1,5 +1,5 @@
-import './App.css';
-import React, {Switch} from 'react';
+//import './App.css';
+import React from 'react';
 import Dashboard from "../src/pages/dashboard/DashboardPage";
 import Generos from "../src/pages/generos/Generos";
 import Plataformas from "../src/pages/plataformas/Plataformas";
@@ -16,7 +16,6 @@ function App() {
   return (
     <BrowserRouter>       
     <Routes>
-      <Switch>
         <Route path="/genero/edit/:id" element={<GeneroModify/>} />
         <Route path="/genero/new" element={<GeneroNew/>} />
         <Route path="/plataforma/edit/:id" element={<PlataformaModify/>} />
@@ -25,7 +24,6 @@ function App() {
         <Route exact path="/plataformas" element={<Plataformas/>} />
         <Route exact path="/" element={<Dashboard/>} />
         <Route path="/new" element={<NewGame/>}/>
-      </Switch>
     </Routes>     
     </BrowserRouter>
   );

@@ -1,7 +1,7 @@
 import createData from "../../axios/createData";
-import fetchUserData from "../../axios/fetchUserData";
+import {fetchUserData} from "../../axios/fetchUserData";
 import { useState, useEffect } from "react";
-import { Buffer } from 'node:buffer';
+// import { Buffer } from 'node:buffer';
 import thisURL from "../../constants/thisURL";
 
 const NewPage = () => {
@@ -15,13 +15,13 @@ const [err, setErr] = useState('');
 
     function dio_click () {
         try{
-        nombre_juego = document.getElementById("nombre_juego").value;
-        descripcion = document.getElementById("descripcion").value;
-        url_juego = document.getElementById("url_juego").value;
-        imagen = document.getElementById("imagen").value;
-        plataforma = document.getElementById("plataforma").value;
-        genero = document.getElementById("genero_juego").value;
-        cont = 0;
+        const nombre_juego = document.getElementById("nombre_juego").value;
+        const descripcion = document.getElementById("descripcion").value;
+        const url_juego = document.getElementById("url_juego").value;
+        const imagen = document.getElementById("imagen").value;
+        const plataforma = document.getElementById("plataforma").value;
+        const genero = document.getElementById("genero_juego").value;
+        let cont = 0;
         if ((nombre_juego == null) || (nombre_juego == "")) {
             document.getElementById("return_nombre").innerHTML = "Este campo es obligatorio";
             cont++;
@@ -85,14 +85,15 @@ const [err, setErr] = useState('');
     function seleccionarEnviar () {
         try {
             if (dio_click()) {
-                const image_data = Buffer.from(document.getElementById("imagen")[0], "uft8");
-                const datos = {name: document.getElementById("nombre_juego").value, 
+                //const image_data = Buffer.from(document.getElementById("imagen")[0], "uft8");
+                const datos = {name: document.getElementById("nombre_juego").value,
                 type_image: document.getElementById("imagen").value, id_plataform: document.getElementById("plataforma").value, 
                 description: document.getElementById("descripcion").value, url: document.getElementById("url_juego").value, 
-                id_gender: document.getElementById("genero_juego").value, image: image_data};
+                id_gender: document.getElementById("genero_juego").value//, image: image_data
+                };
                 // revisar tema imagen
                 createData ('/', datos);
-                location.href (thisURL);
+//                location.href (thisURL);
             }
         } catch (er) {
             alert (er);

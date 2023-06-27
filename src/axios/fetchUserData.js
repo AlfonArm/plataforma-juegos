@@ -1,13 +1,12 @@
 import dir from '../constants/api';
 import Axios from 'axios';
 
-const fetchUserData = async (page, request = '') => {     
+export const fetchUserData = async (page, request = '') => {
     try {
+        debugger;
         const response = await Axios.get(dir + page, request);     
-        return response
+        return response.data
     } catch (error) {       
         console.error(error);     
     }   
-};
-
-export default fetchUserData
+}

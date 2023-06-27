@@ -2,14 +2,15 @@ import HeaderComponent from '../../components/HeaderComponent';
 import FooterComponent from '../../components/FooterComponent'
 import NavBarComponent from '../../components/NavBarComponent'
 import {useState, useEffect} from 'react';
-import fetchUserData from '../../axios/fetchUserData'
+import {fetchUserData} from "../../axios/fetchUserData";
 import deleteUserData from '../../axios/deleteUserData'
 import api from '../../constants/api'
 
 const Generos = () => {
     const [generos, setGeneros] = useState([]);
     useEffect (() => setGeneros((fetchUserData('/generos').data)), []);
-    let pointer;
+//    const [pointer, setPointer] = useState(0);
+    const [agregar, setAgregar] = useState();
 
     // lo que devuelve si la lista está vacía (implementar poner un error de ser necesario)
     const noExiste = () => {
@@ -20,6 +21,9 @@ const Generos = () => {
         )
     }
 
+    function redirigir () {
+        return null;
+    }
     // función de borrado
     function checkDependiencesAndPopUp (id, nombre = '') {
         try {
@@ -36,15 +40,13 @@ const Generos = () => {
             <HeaderComponent/>
             <NavBarComponent/>
             <div>
-                <img src='../../styles/form.png' onClick={agregar ? changeAdd(false) : changeAdd(true)}/>
-                {agregar ? openForm() : null}
+                <img src='../../styles/form.png' onClick={redirigir()}/>
                 {console.log('Respuesta: '+generos+'. Datos: '+generos.data+'. Status: '+generos.status)}
                 {((generos === null)&&(Array.isArray(generos))&&(generos.length > 0)) ? noExiste() :
                     generos.map ( (genero) => {
                         return (
                             <div key={genero.id}>
                                 <div className='interface'>
-                                    <img className ='interface_image' src = '../../styles/modify' onClick={location.href = api+'/generos/edit:'+genero.id}/>
                                     <img className ='interface_image' src = '../../styles/delete' onClick={checkDependiencesAndPopUp(genero.id, genero.nombre)}/>
                                 </div>
                                 <p>{genero.nombre}</p>
