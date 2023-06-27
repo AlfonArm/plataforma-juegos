@@ -1,5 +1,6 @@
 import React from 'react';
 import {Router, Link } from "react-router-dom";
+import Navegacion from "./HeaderComponent";
 
 const  NavBarComponent = () => {
     return (
@@ -20,3 +21,5 @@ const  NavBarComponent = () => {
         </div>
     )
 }
+
+export default NavBarComponent

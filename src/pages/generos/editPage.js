@@ -1,14 +1,14 @@
+import react, {useState, useEffect} from 'react';
 import createData from '../../axios/createData';
 import HeaderComponent from '../../components/HeaderComponent';
 import FooterComponent from '../../components/FooterComponent';
 import navBarComponent from '../../components/NavBarComponent';
-import {useState, useEffect} from 'react';
-import fetchUserData from '../../axios/fetchUserData';
+import {fetchUserData} from "../../axios/fetchUserData";
 
 
 const editPage = () => {
-    const params = new URLSearchParams(location.search);
-    const genderId = params.get('id')
+    //const params = new URLSearchParams(location.search);
+    const genderId = 1//params.get('id')
     const [nombre, setName] = useState('');
     const [existe, setExists] = useState(false);
     const [err, setError] = useState('none');
