@@ -17,11 +17,31 @@ const Dashboard = () => {
     useEffect (() => {
         if (!generos) getGeneros()
         }, []);
- //   useEffect (() => {setPlataformas(fetchUserData('/plataformas'))}, []);
- //   useEffect (() => {setDatos (fetchUserData("/juegos", [nombre, plataforma, genero, orden]))}, [nombre, plataforma, genero, orden]);
 
+    useEffect (() => {
+        if (!plataformas) getPlataformas()
+        }, []);
+
+    useEffect (() => {
+        if (!datos) getJuegos([nombre, plataforma, genero, orden])
+        }, [nombre, plataforma, genero, orden]);
+ 
     const getGeneros = async () => {
         const data = await fetchUserData('/generos');
+        if (data) {
+            setGeneros(data);
+        }
+    }
+
+    const getPlataformas = async () => {
+        const data = await fetchUserData('/generos');
+        if (data) {
+            setGeneros(data);
+        }
+    }
+
+    const getJuegos = async (params) => {
+        const data = await fetchUserData('/generos', params);
         if (data) {
             setGeneros(data);
         }
@@ -91,14 +111,14 @@ const Dashboard = () => {
         <div>
             <HeaderComponent/>
             <navBarComponent/>
+            {/*
             <div class = "busqueda_header">
                 <div>
                     <label>Buscar:</label>
-                    <input type='text' onChange={e => changeName(e.changeName)}/>
+                    <input type='text' onChange={(e) => changeName(e.changeName)}/>
                     <p className = {nombre.length === 0 ? "invisible" : "bloque"}>Mostrando resultados para: {nombre}</p>
                 </div>
                 <div id = "info_busqueda" className = "busqueda_header">
-                    {/*
                     <div>
                         <label>Género:</label>
                         <select id = "header_genero">
@@ -117,7 +137,7 @@ const Dashboard = () => {
                         <select id = "header_plataforma">
                             <option selected value = "not_valid">Seleccionar plataforma</option>
                             {
-                                plataformas.map( (plat, platKey) => {
+                                plataformas && plataformas.map( (plat, platKey) => {
                                     return (
                                         <option onChange={(e) => changePlataform(e.changePlataform)} key = {platKey}>{plat.nombre}</option>
                                     )
@@ -125,7 +145,6 @@ const Dashboard = () => {
                             }
                         </select><br></br>
                     </div>
-                    */}
                     <div>
                         <label>Orden:</label>
                         <img className='ascending_or' key={orden} src={'../../styles/'+orden} onClick={orden === 'ascending' ? changeOrder ('descending') : changeOrder ('ascending')}/>
@@ -133,10 +152,10 @@ const Dashboard = () => {
                 </div>
                 <button  class = "boton_bonito" onClick={agregarJuego}>Agregar</button>
             </div>
-            {/*<div class = "lista">
+            */}
+            <div class = "lista">
                 {datos.length === 0 ? notFound() : createList()}
             </div>
-            */}
             <FooterComponent/>
         </div>
     );

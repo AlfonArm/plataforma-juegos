@@ -1,4 +1,4 @@
-import react, {useState, useEffect} from 'react';
+import react, {UseState, UseEffect} from 'react';
 import createData from '../../axios/createData';
 import HeaderComponent from '../../components/HeaderComponent';
 import FooterComponent from '../../components/FooterComponent';
@@ -7,33 +7,42 @@ import {fetchUserData} from "../../axios/fetchUserData";
 
 
 const editPage = () => {
-    //const params = new URLSearchParams(location.search);
-    const genderId = 1//params.get('id')
-    const [nombre, setName] = useState('');
-    const [existe, setExists] = useState(false);
-    const [err, setError] = useState('none');
-    useEffect(() => setExists(exists(genderId) != -1), [])
+    // ¿Cómo accedo la url? const params = new URLSearchParams(location.search);
+    const genderId = 1 //params.get('id')
+    const [nombre, setName] = UseState('');
+    const [err, setError] = UseState('none');
+    UseEffect(() => setName(exists()), [])
 
     function exists () {
         try {
-            let datos = fetchUserData('/generos').value;
-            var index = datos.findIndex(function(dato) {
-                return dato.id == genderId
-            }); 
-            if (index == null) return -1;
-            setName(datos[index].nombre);
-            return (datos[index].nombre)
+            if (nombre == '') {
+                let datos = fetchUserData('/generos').value;
+                if (datos) {
+                    let existe = false;
+                    let i = 0;
+                    while ((!existe)&&(datos.length > i)) if (datos[i++].id == genderId) existe = true;
+                    if (existe)
+                        return datos[i].nombre
+                    else {
+                        setError ('El elemento no existe');
+                        return '';
+                    }
+                } else {
+                    setError('No hay datos guardados');
+                    return '';
+                }
+            }
         } catch (er) {
             // dado que no hay una funcionalidad para tomar un solo elemento, no va a devolver un error de base de datos salvo que no haya datos o algo así. Habría que poner que
             // devuelva 404 en todo caso.
-            setError(er);
+            setError('Error: '+er);
         }
     }
 
     function editar () {
         const pointer = document.getElementById('nombre_genero');
         if (pointer.value.length == 0) {
-            pointer.innerHTML('Debe insertar un valor válido');
+            document.getElementById('return_genero').innerHTML('Debe insertar un valor válido');
         } else {
             try {
                 createData('/generos', pointer.value);
@@ -76,7 +85,7 @@ const editPage = () => {
         <div>
             <HeaderComponent/>
             <navBarComponent/>
-            {exists() ? chargeForm() : throwError()}
+            {nombre != '' ? chargeForm() : throwError()}
             <FooterComponent/>
         </div>
     )

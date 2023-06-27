@@ -1,4 +1,4 @@
-//import './App.css';
+import './App.css';
 import React from 'react';
 import Dashboard from "../src/pages/dashboard/DashboardPage";
 import Generos from "../src/pages/generos/Generos";
