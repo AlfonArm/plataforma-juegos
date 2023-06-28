@@ -6,13 +6,14 @@ import {fetchUserData} from "../../axios/fetchUserData";
 
 const Dashboard = () => {
     
-    const [datos, setDatos] = useState();
-    const [plataformas, setPlataformas] = useState();
-    const [generos, setGeneros] = useState();
+    const [datos, setDatos] = useState({});
+    const [plataformas, setPlataformas] = useState({});
+    const [generos, setGeneros] = useState({});
     const [nombre, setName] = useState("");
     const [plataforma, setPlataform] = useState("");
     const [genero, setGender] = useState("");
     const [orden, setOrder] = useState("ascending");
+    const [erro, setError] = useState("")
 
     useEffect (() => {
         if (!generos) getGeneros()
@@ -27,23 +28,36 @@ const Dashboard = () => {
         }, [nombre, plataforma, genero, orden]);
  
     const getGeneros = async () => {
-        const data = await fetchUserData('/generos');
-        if (data) {
-            setGeneros(data);
+        try {
+            const data = await fetchUserData('/generos');
+            if (data) {
+                setGeneros(data);
+            }
+        } catch (e) {
+            setError(erro + '/n' + e)
         }
     }
 
     const getPlataformas = async () => {
-        const data = await fetchUserData('/plataformas');
-        if (data) {
-            setPlataformas(data);
+        try {
+            const data = await fetchUserData('/plataformas');
+            if (data) {
+                setPlataformas(data);
+            }
+        } catch (e) {
+            setError(erro +'/n'+ e)
         }
+        
     }
 
     const getJuegos = async (params = "") => {
-        const data = await fetchUserData('/juegos', params);
+        try {
+            const data = await fetchUserData('/juegos', params);
         if (data) {
             setDatos(data);
+        }
+        } catch (e) {
+            setError(erro +'/n'+ e);
         }
     }
 
@@ -98,6 +112,7 @@ const Dashboard = () => {
                 <div>
                     <img src = '../../styles/not_found.png' id = 'not_found'/>
                     <p>No se han encontrado resultados</p>
+                    {erro ? () => {return (<p>Error: {erro}</p>)} : null}
                 </div>
             </div>
         )
@@ -107,7 +122,6 @@ const Dashboard = () => {
         if (!plataformas) getPlataformas();
         if (!generos) getGeneros();
         if (!datos) getJuegos();
-
     }
 
     return (
@@ -115,6 +129,7 @@ const Dashboard = () => {
             <HeaderComponent/>
             <NavBarComponent/>
             {cargarDatos()}
+            {console.log(generos[1])}
             <div class = "busqueda_header">
                 <div>
                     <label>Buscar:</label>
