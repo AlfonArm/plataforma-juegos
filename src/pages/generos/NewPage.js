@@ -7,12 +7,17 @@ const newPage = () => {
     function subir () {
         try {
             const pointer = document.getElementById("nombre_genero").value;
-            if (pointer.length == 0) {
-                document.getElementById('return_genero').innerHTML('Debe insertar un valor válido');
-                alert ('Debe insertar un valor válido');
+            if ((pointer == null)||(typeof pointer !== 'string')||(pointer.length == 0)) {
+                document.getElementById('return_genero').innerHTML= 'Debe insertar un valor válido';
             } else {
-                createData('/generos', pointer);
-                // algo que verifique que se subió
+                const requestPost = { nombre: pointer}
+                const result = createData('/generos', {requestPost});
+                if ((typeof result === 'number')&&(result == 200)) {
+                    alert ('Se creó el género con éxito. Redirigiendo a la página inicial')
+                    window.location.replace('/generos');
+                } else {
+                    document.getElementById('return_genero').innerHTML= 'Hubo un error. Intente otra vez';
+                }
             }
         } catch (er) {
             console.log(er)
@@ -32,7 +37,7 @@ const newPage = () => {
                         <p id = "return_genero"></p>
                     </fieldset>
                 </div>
-                <button className="centro" onClick={subir()}>Subir</button>
+                <input value = "Subir" type="button" className="centro" onClick={() => subir()}/>
             </form>
         </div>
     )

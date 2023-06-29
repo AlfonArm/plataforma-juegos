@@ -57,6 +57,7 @@ const Generos = () => {
                             return (
                                 <div key={genero.id} className='genplat'>
                                     <img className='basura' src = {delet} onClick={() => checkDependiencesAndPopUp(genero.id)}/>
+                                    <img className='basura' src = {form} onClick={() => window.location.replace('/generos/edit/'+genero.id)}/>
                                     <p>{genero.nombre}</p>
                                 </div>
                             )

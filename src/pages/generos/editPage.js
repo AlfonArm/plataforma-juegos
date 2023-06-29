@@ -1,14 +1,13 @@
-import react, {UseState, UseEffect} from 'react';
+import react, {useState, useEffect} from 'react';
 import createData from '../../axios/createData';
 import {fetchUserData} from "../../axios/fetchUserData";
+import not_found from '../../styles/not_found.png'
 
-
-const editPage = () => {
-    // ¿Cómo accedo la url? const params = new URLSearchParams(location.search);
-    const genderId = 1 //params.get('id')
-    const [nombre, setName] = UseState('');
-    const [err, setError] = UseState('none');
-    UseEffect(() => setName(exists()), [])
+const EditPage = () => {
+    const genderId = getCurrentURL().match(/\/(\d+)$/)[1];
+    const [nombre, setName] = useState('');
+    const [err, setError] = useState('none');
+    useEffect(() => setName(exists()), [])
 
     function exists () {
         try {
@@ -68,11 +67,15 @@ const editPage = () => {
         )
     }
 
+    function getCurrentURL () {
+        return window.location.href
+    }
+
     const throwError = () => {
         return (
             <div>
-                <img src = '../../styles/not_found.png'/>
-                <p><span>Error:</span></p><br></br>
+                <img src = {not_found}/>
+                <p><span>Error:</span></p>
                 <p>{err}</p>
             </div>
         )
@@ -85,4 +88,4 @@ const editPage = () => {
     )
 }
 
-export default editPage
+export default EditPage

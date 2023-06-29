@@ -9,6 +9,7 @@ export default class FooterComponent extends Component {
         <p>Alfonso Armanini</p>
         <p>Grupo 15 módulo React</p>
         <p>Gamepedia</p>
+        <br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
       </div>
     )
   }
