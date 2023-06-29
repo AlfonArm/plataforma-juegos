@@ -48,7 +48,12 @@
 }
 
 .abajo {
+	padding: 10px;
 	background-color: black;
+}
+
+.abajo p {
+	color: white;
 }
 body {
 	background-color: #EDEDED;
@@ -62,7 +67,7 @@ h1 {
 	margin: auto
 }
 
-header span {
+inicio span {
 	background-color: #DC191B;
 }
 
@@ -73,7 +78,7 @@ header span {
   padding-bottom: 35px;
 }
 
-header p {
+.inicio p {
 	color:rgb(153, 163, 164);
 	margin-block-end: 0em;
 	margin: auto;
@@ -89,7 +94,6 @@ header p {
 }
 
 .busqueda_header div {
-	padding-top: 20px;
 	font-weight: bold;
 	margin-right: 0;
 	color: white;
@@ -103,9 +107,20 @@ header p {
 }
 
 .barra_inicio {
-	display: inline;
+	display: flex;
 	background-color:#0F1618;
 	text-align: center;
+	padding-bottom: 5px;
+}
+
+.barra_inicio a {
+	color: white;
+	min-width: 25%;
+}
+
+.ascending_or {
+	width: 10%;
+	padding-left: 20px;
 }
 
 /* Este es el botón que te lleva al altajuego */
@@ -284,4 +299,34 @@ header select {
 	color: white;
 	font-weight: bold;
 	margin: auto;
+}
+
+.access_form {
+	width: 3%;
+	float: right;
+	padding: 10px;
+}
+
+.mostrar_gen_plat {
+	min-height: 400px;
+	padding-left: 20%;
+	padding-right: 20%;
+}
+
+.form_chiquito {
+	margin-left: 35%;
+	margin-right: 35%;
+	padding-bottom: 10px;
+	min-width: 260px;
+}
+
+.form_chiquito .flex {
+	justify-content: center;
+	margin-top: 10px;
+}
+
+.centro {
+	display: block;
+	margin: auto;
+	margin-top: 10px
 }

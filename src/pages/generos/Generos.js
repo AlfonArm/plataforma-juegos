@@ -5,6 +5,8 @@ import {useState, useEffect} from 'react';
 import {fetchUserData} from "../../axios/fetchUserData";
 import deleteUserData from '../../axios/deleteUserData'
 import api from '../../constants/api'
+import form from '../../styles/form.png'
+import delet from '../../styles/delete.png'
 
 const Generos = () => {
     const [generos, setGeneros] = useState([]);
@@ -21,9 +23,6 @@ const Generos = () => {
         )
     }
 
-    function redirigir () {
-        return null;
-    }
     // función de borrado
     function checkDependiencesAndPopUp (id, nombre = '') {
         try {
@@ -37,25 +36,23 @@ const Generos = () => {
     // cuerpo de página
     return (
         <div>
-            <HeaderComponent/>
-            <NavBarComponent/>
             <div>
-                <img src='../../styles/form.png' onClick={redirigir()}/>
-                {console.log('Respuesta: '+generos+'. Datos: '+generos.data+'. Status: '+generos.status)}
-                {((generos === null)&&(Array.isArray(generos))&&(generos.length > 0)) ? noExiste() :
-                    generos.map ( (genero) => {
-                        return (
-                            <div key={genero.id}>
-                                <div className='interface'>
-                                    <img className ='interface_image' src = '../../styles/delete' onClick={checkDependiencesAndPopUp(genero.id, genero.nombre)}/>
+                <img className='access_form' src={form} onClick={() => window.location.replace('./genero/new')}/>
+                <div className='mostrar_gen_plat'>
+                    {((Array.isArray(generos))&&(generos.length > 0)) ?
+                        generos.map ( (genero) => {
+                            return (
+                                <div key={genero.id}>
+                                    <div className='interface'>
+                                        <img className ='interface_image' src = {delet} onClick={() => checkDependiencesAndPopUp(genero.id, genero.nombre)}/>
+                                    </div>
+                                    <p>{genero.nombre}</p>
                                 </div>
-                                <p>{genero.nombre}</p>
-                            </div>
-                        )
-                    })
-                }
+                            )
+                        }) : noExiste()
+                    }
+                </div>
             </div>
-            <FooterComponent/>
         </div>
     );
 };

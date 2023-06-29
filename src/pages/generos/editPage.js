@@ -1,8 +1,5 @@
 import react, {UseState, UseEffect} from 'react';
 import createData from '../../axios/createData';
-import HeaderComponent from '../../components/HeaderComponent';
-import FooterComponent from '../../components/FooterComponent';
-import navBarComponent from '../../components/NavBarComponent';
 import {fetchUserData} from "../../axios/fetchUserData";
 
 
@@ -83,10 +80,7 @@ const editPage = () => {
 
     return (
         <div>
-            <HeaderComponent/>
-            <navBarComponent/>
             {nombre != '' ? chargeForm() : throwError()}
-            <FooterComponent/>
         </div>
     )
 }

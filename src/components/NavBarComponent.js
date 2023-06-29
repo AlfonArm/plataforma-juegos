@@ -5,9 +5,9 @@ import Navegacion from "./HeaderComponent";
 const  NavBarComponent = () => {
     return (
         <div className='barra_inicio'>
-            <Link to="/">Juegos</Link>
-            <Link to="/generos">Generos</Link>
-            <Link to="/plataformas">Plataformas</Link>
+            <Link to="/">Juegos</Link> <br></br>
+            <Link to="/generos">Generos</Link> <br></br>
+            <Link to="/plataformas">Plataformas</Link> <br></br>
         </div>
     )
 }
