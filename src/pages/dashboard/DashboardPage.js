@@ -12,9 +12,9 @@ import delet from "../../styles/delete.png"
 const Dashboard = () => {
     
     // conjuntos de datos a cargar
-    const [datos, setDatos] = useState({});
-    const [plataformas, setPlataformas] = useState({});
-    const [generos, setGeneros] = useState({});
+    const [datos, setDatos] = useState();
+    const [plataformas, setPlataformas] = useState();
+    const [generos, setGeneros] = useState();
     // filtros
     const [nombre, setName] = useState("");
     const [plataforma, setPlataform] = useState("");
@@ -25,6 +25,7 @@ const Dashboard = () => {
     const [platEr, setPlater] = useState(false)
     const [genEr, setGener] = useState(false)
 
+    console.log({generos});
     useEffect (() => {
         if (!generos) getGeneros()
         }, []);
@@ -47,6 +48,7 @@ const Dashboard = () => {
         try {
             const data = await fetchUserData('/generos');
             if (data) {
+
                 setGeneros(data);
             }
         } catch (e) {
@@ -141,12 +143,6 @@ const Dashboard = () => {
         )
     }
 
-    function cargarDatos () {
-        if (!plataformas) getPlataformas();
-        if (!generos) getGeneros();
-        if (!datos) getJuegos();
-    }
-
     const showError = () => {
         return (
             <p>Error: {erro}</p>
@@ -154,8 +150,6 @@ const Dashboard = () => {
     }
     return (
         <div>
-            {cargarDatos()}
-            {console.log(generos[1])}
             <div className = "busqueda_header">
                 <div>
                     <label>Buscar:</label>
