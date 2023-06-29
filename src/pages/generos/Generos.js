@@ -1,6 +1,3 @@
-import HeaderComponent from '../../components/HeaderComponent';
-import FooterComponent from '../../components/FooterComponent'
-import NavBarComponent from '../../components/NavBarComponent'
 import {useState, useEffect} from 'react';
 import {fetchUserData} from "../../axios/fetchUserData";
 import deleteUserData from '../../axios/deleteUserData'
@@ -9,10 +6,25 @@ import form from '../../styles/form.png'
 import delet from '../../styles/delete.png'
 
 const Generos = () => {
-    const [generos, setGeneros] = useState([]);
-    useEffect (() => setGeneros((fetchUserData('/generos').data)), []);
+    const [generos, setGeneros] = useState();
 //    const [pointer, setPointer] = useState(0);
     const [agregar, setAgregar] = useState();
+    const [erro, setError] = useState("")
+
+    useEffect (() => {
+        if (!generos) getGeneros()
+        }, []);
+    
+    const getGeneros = async () => {
+        try {
+            const data = await fetchUserData('/generos');
+            if (data) {
+                setGeneros(data);
+            }
+        } catch (e) {
+            setError(erro + '\n' + e)
+        }
+    }
 
     // lo que devuelve si la lista está vacía (implementar poner un error de ser necesario)
     const noExiste = () => {
@@ -24,8 +36,9 @@ const Generos = () => {
     }
 
     // función de borrado
-    function checkDependiencesAndPopUp (id, nombre = '') {
+    function checkDependiencesAndPopUp (id) {
         try {
+            console.log('/generos/'+id);
             deleteUserData('/generos/'+id);
             alert ("El elemento se ha borrado satisfactoriamente")
         } catch (error) {
@@ -37,15 +50,13 @@ const Generos = () => {
     return (
         <div>
             <div>
-                <img className='access_form' src={form} onClick={() => window.location.replace('./genero/new')}/>
-                <div className='mostrar_gen_plat'>
+                <img className='access_form' src={form} onClick={() => window.location.replace('./generos/new')}/>
+                <div className='mostrar_gen_plat lista'>
                     {((Array.isArray(generos))&&(generos.length > 0)) ?
                         generos.map ( (genero) => {
                             return (
-                                <div key={genero.id}>
-                                    <div className='interface'>
-                                        <img className ='interface_image' src = {delet} onClick={() => checkDependiencesAndPopUp(genero.id, genero.nombre)}/>
-                                    </div>
+                                <div key={genero.id} className='genplat'>
+                                    <img className='basura' src = {delet} onClick={() => checkDependiencesAndPopUp(genero.id)}/>
                                     <p>{genero.nombre}</p>
                                 </div>
                             )

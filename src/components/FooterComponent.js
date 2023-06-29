@@ -8,6 +8,7 @@ export default class FooterComponent extends Component {
         <p>Carlos Catacora</p>
         <p>Alfonso Armanini</p>
         <p>Grupo 15 módulo React</p>
+        <p>Gamepedia</p>
       </div>
     )
   }

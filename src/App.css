@@ -59,6 +59,7 @@ body {
 	background-color: #EDEDED;
 	margin: 0;
 	font-family: Arial, Helvetica, sans-serif;
+	width: 100%
 }
 h1 {
 	width: 60px;
@@ -67,7 +68,7 @@ h1 {
 	margin: auto
 }
 
-inicio span {
+.inicio span {
 	background-color: #DC191B;
 }
 
@@ -91,6 +92,7 @@ inicio span {
 	padding-left: 10px;
 	justify-content: space-evenly;
 	align-items: baseline;
+	padding-bottom: 10px;
 }
 
 .busqueda_header div {
@@ -165,15 +167,22 @@ inicio span {
   outline-offset: 2px;
 }
 
+.mostrar_gen_plat {
+	min-height: 400px;
+	padding-left: 5%;
+	padding-right: 5%;
+}
+
 .lista {
-  display: block;
-  width: 80%;
-  margin: auto;
+	display: flex;
+	flex-wrap: wrap;
+  	width: 80%;
 	padding-left: 6%;
 	padding-right: 6%;
 	padding-top: 20px;
 	padding-bottom: 20px;
 	min-height: 100%;
+	margin: auto;
 }
 
 .bloque_info {
@@ -199,8 +208,8 @@ inicio span {
 
 .reducir_img {
 	width: 100%;
-  margin: auto;
-  border-bottom: 1px solid black;
+  	margin: auto;
+  	border-bottom: 1px solid black;
 }
 
 #not_found {
@@ -307,10 +316,17 @@ header select {
 	padding: 10px;
 }
 
-.mostrar_gen_plat {
-	min-height: 400px;
-	padding-left: 20%;
-	padding-right: 20%;
+.genplat {
+	border: 1px solid black;
+	display: block;
+	background-color: white;
+	padding: 5px;
+	border-radius: 5%;
+	margin: 20px;
+}
+
+.basura {
+	max-width: 20px;
 }
 
 .form_chiquito {
