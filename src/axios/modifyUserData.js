@@ -4,10 +4,10 @@ import Axios from 'axios';
 const modifyUserData = async (page, request) => {     
     try {       
         const response = await Axios.put(dir + page, request);       
-        return response.status
-    } catch (error) {       
-        console.error(error);     
-    }   
+        return Promise.resolve(response.status);
+    } catch (e) {       
+        return e;     
+    } 
 };
 
 export default modifyUserData

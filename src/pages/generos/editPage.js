@@ -62,7 +62,7 @@ const EditPage = () => {
                 document.getElementById('return_genero').innerHTML = 'Debe insertar un valor válido';
             } else {
                 try {
-                    const result = modifyUserData('/generos/'+genderId, {name: document.getElementById('nombre_genero').value}); // si no qué recibiría?
+                    const result = modifyUserData('/generos/'+genderId, {name: document.getElementById('nombre_genero').value});
                     alert('Se ha editado')
                     window.location.replace('/generos');
                 } catch (er) {

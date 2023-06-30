@@ -35,12 +35,21 @@ const Generos = () => {
         )
     }
 
+    function exito () {
+        alert ('Se ha borrado exitosamente')
+    }
+
+    function fracaso (num, mensaje) {
+        alert ('Hubo un error: ' + num + '. ' + mensaje)
+    }
+
     // función de borrado
-    function checkDependiencesAndPopUp (id) {
+    async function checkDependiencesAndPopUp (id) {
         try {
-            console.log('/generos/'+id);
-            deleteUserData('/generos/'+id);
-            alert ("El elemento se ha borrado satisfactoriamente")
+            const result = deleteUserData('/generos/'+id);
+            getGeneros()
+            const promesa = await result.then()
+            if ((promesa.status >= 200)&&(promesa.status<300)) exito(); else fracaso(promesa.status, promesa.statusText)
         } catch (error) {
             alert (error);
         }

@@ -3,20 +3,30 @@ import createData from '../../axios/createData';
 
 
 const newPage = () => {
-// ??????
-    function subir () {
+
+    const Upload = async (pointer) => {
+        const result = await createData('/generos', {name: pointer});
+        console.log(result)
+        return result
+    }
+
+    function exito () {
+        alert ('Se creó el género con éxito. Redirigiendo a la página inicial...')
+        window.location.replace('/generos');
+    }
+
+    function fracaso () {
+        document.getElementById('return_genero').innerHTML= 'Hubo un error. Intente otra vez';
+    }
+
+    async function subir () {
         try {
             const pointer = document.getElementById("nombre_genero").value;
             if ((pointer == null)||(typeof pointer !== 'string')||(pointer.length == 0)) {
                 document.getElementById('return_genero').innerHTML= 'Debe insertar un valor válido';
             } else {
-                const result = createData('/generos', {name: pointer});
-                if ((typeof result === 'number')&&(result == 200)) {
-                    alert ('Se creó el género con éxito. Redirigiendo a la página inicial')
-                    window.location.replace('/generos');
-                } else {
-                    document.getElementById('return_genero').innerHTML= 'Hubo un error. Intente otra vez';
-                }
+                const result = await Upload(pointer);
+                result.then (exito, fracaso)
             }
         } catch (er) {
             console.log(er)

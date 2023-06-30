@@ -34,7 +34,7 @@ const Dashboard = () => {
         }, []);
 
     useEffect (() => {
-        getJuegos({name: nombre, idPlataform: plataforma, idGender: genero, ascending: orden == 'ascending'})
+        getJuegos()
         }, [nombre, plataforma, genero, orden]);
 
     useEffect (() => {
@@ -65,9 +65,9 @@ const Dashboard = () => {
         
     }
 
-    const getJuegos = async (params) => {
+    const getJuegos = async () => {
         try {
-            const data = await fetchUserData('/juegos', params);
+            const data = await fetchUserData('/juegos', {name: nombre, idPlataform: plataforma, idGender: genero, ascending: orden == 'ascending'});
             if (data) {
                 setDatos(data);
             }
