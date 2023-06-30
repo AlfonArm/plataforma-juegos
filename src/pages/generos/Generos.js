@@ -7,7 +7,6 @@ import delet from '../../styles/delete.png'
 
 const Generos = () => {
     const [generos, setGeneros] = useState();
-//    const [pointer, setPointer] = useState(0);
     const [agregar, setAgregar] = useState();
     const [erro, setError] = useState("")
 

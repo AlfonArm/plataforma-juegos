@@ -64,7 +64,7 @@ const Plataformas = () => {
                         plataformas.map ( (plataforma) => {
                             return (
                                 <div key={plataforma.id} className='genplat'>
-                                    <img className='basura' src = {delet} onClick={() => checkDependiencesAndPopUp(genero.id)}/>
+                                    <img className='basura' src = {delet} onClick={() => checkDependiencesAndPopUp(plataforma.id)}/>
                                     <img className='basura' src = {form} onClick={() => window.location.replace('/plataformas/edit/'+plataforma.id)}/>
                                     <p>{plataforma.nombre}</p>
                                 </div>

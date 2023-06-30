@@ -56,7 +56,7 @@ const EditPage = () => {
 
     function editar () {
         if (typeof document.getElementById('nombre_plataforma').value === 'string') {
-            if ((document.getElementById('nombre_plataforma').value == null)||(document.getElementById('nombre_genero').value.length == 0)) {
+            if ((document.getElementById('nombre_plataforma').value == null)||(document.getElementById('plataforma').value.length == 0)) {
                 document.getElementById('return_plataforma').innerHTML = 'Debe insertar un valor válido';
             } else {
                 try {
