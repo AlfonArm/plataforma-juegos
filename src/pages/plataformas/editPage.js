@@ -35,7 +35,7 @@ const EditPage = () => {
                     while ((!existe)&&(a.length > i)) {
                         i++;
                         if (i in a) {
-                            if (a[i].id == genderId) {
+                            if (a[i].id == PlataformId) {
                                 existe = true;
                                 if (typeof a[i].nombre === 'string') console.log('encontre'+a[i].nombre+' en '+a[i].id)
                             }
@@ -60,7 +60,7 @@ const EditPage = () => {
                 document.getElementById('return_plataforma').innerHTML = 'Debe insertar un valor válido';
             } else {
                 try {
-                    const result = modifyUserData('/plataformas/'+genderId, {name: document.getElementById('nombre_plataforma').value});
+                    const result = modifyUserData('/plataformas/'+PlataformId, {name: document.getElementById('nombre_plataforma').value});
                     alert('Se ha editado')
                     window.location.replace('/plataformas');
                 } catch (er) {
