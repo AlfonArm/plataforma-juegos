@@ -34,7 +34,7 @@ const Dashboard = () => {
         }, []);
 
     useEffect (() => {
-        getJuegos({name: nombre, idPlataform: plataforma, idGender: genero, ascending: orden})
+        getJuegos({name: nombre, idPlataform: plataforma, idGender: genero, ascending: orden == 'ascending'})
         }, [nombre, plataforma, genero, orden]);
 
     useEffect (() => {
@@ -78,10 +78,12 @@ const Dashboard = () => {
 
     const changeName = (newName) => {
         setName(newName);
+        console.log(nombre)
     };
 
     const changeGender = (newGender) => {
         setGender(newGender);
+        console.log(genero)
     };
     
     const changePlataform = (newPlataform) => {

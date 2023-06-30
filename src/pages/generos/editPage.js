@@ -1,68 +1,92 @@
 import react, {useState, useEffect} from 'react';
-import createData from '../../axios/createData';
+import modifyUserData from '../../axios/modifyUserData'
 import {fetchUserData} from "../../axios/fetchUserData";
 import not_found from '../../styles/not_found.png'
 
 const EditPage = () => {
     const genderId = getCurrentURL().match(/\/(\d+)$/)[1];
-    const [nombre, setName] = useState('');
-    const [err, setError] = useState('none');
-    useEffect(() => setName(exists()), [])
+    const [generos, setGeneros] = useState();
 
-    function exists () {
+    useEffect (() => {
+        if (!generos) getGeneros()
+        }, []);
+    
+    const getGeneros = async () => {
         try {
-            if (nombre == '') {
-                let datos = fetchUserData('/generos').value;
-                if (datos) {
+            const data = await fetchUserData('/generos');
+            if (data) {
+                setGeneros(data);
+            }
+        } catch (e) {
+            setError(err + '\n' + e)
+        }
+    }
+
+    const [nombre, setName] = useState();
+    const [err, setError] = useState();
+
+    useEffect(() => setName(exists(generos)))
+
+    function exists (a) {
+        try {
+                if ((a)&&(Array.isArray(a))) {
                     let existe = false;
                     let i = 0;
-                    while ((!existe)&&(datos.length > i)) if (datos[i++].id == genderId) existe = true;
-                    if (existe)
-                        return datos[i].nombre
-                    else {
-                        setError ('El elemento no existe');
-                        return '';
+                    while ((!existe)&&(a.length > i)) {
+                        i++;
+                        if (i in a) {
+                            if (a[i].id == genderId) {
+                                existe = true;
+                                if (typeof a[i].nombre === 'string') console.log('encontre'+a[i].nombre+' en '+a[i].id)
+                            }
+                        }
                     }
+                    if ((i in a)&&(typeof a[i].nombre === 'string')&&(existe)) {
+                        return a[i].nombre
+                    } else {
+                        setError ('El elemento no existe');
+                        }
                 } else {
                     setError('No hay datos guardados');
-                    return '';
                 }
-            }
         } catch (er) {
             // dado que no hay una funcionalidad para tomar un solo elemento, no va a devolver un error de base de datos salvo que no haya datos o algo así. Habría que poner que
             // devuelva 404 en todo caso.
-            setError('Error: '+er);
+            setError(er);
         }
     }
 
     function editar () {
-        const pointer = document.getElementById('nombre_genero');
-        if (pointer.value.length == 0) {
-            document.getElementById('return_genero').innerHTML('Debe insertar un valor válido');
-        } else {
-            try {
-                createData('/generos', pointer.value);
-                alert('Se ha creado el nuevo género con éxito')
-            } catch (er) {
-                alert ('Error: '+er);
+        if (typeof document.getElementById('nombre_genero').value === 'string') {
+            if ((document.getElementById('nombre_genero').value == null)||(document.getElementById('nombre_genero').value.length == 0)) {
+                document.getElementById('return_genero').innerHTML = 'Debe insertar un valor válido';
+            } else {
+                try {
+                    const result = modifyUserData('/generos/'+genderId, {name: document.getElementById('nombre_genero').value}); // si no qué recibiría?
+                    alert('Se ha editado')
+                    window.location.replace('/generos');
+                } catch (er) {
+                    alert (er);
+                }
             }
         }
     }
 
     const chargeForm = () => {
         return (
-            <form className="cuadro" onsubmit = "return dio_click()" method = "post">
+            <form className="cuadro form chiquito">
                 <div className = "top_form">
-                    <p>Completa:</p>
+                    <p>Editar:</p>
                 </div>
                 <div className = "flex"> 
                     <fieldset>
                         <legend>Nombre</legend>
-                        <input placeholder="Nombre del género" id = "nombre_genero" type='text' value={nombre}/>
+                        <p>Nombre anterior: {nombre}</p>
+                        <input placeholder="Nombre del género" id = "nombre_genero" type='text'/>
                         <p id = "return_genero"></p>
                     </fieldset>
                 </div>
-                <button type = "submit" onClick={editar()}>Subir</button>
+                <input type = "button" onClick={() => editar()} value="Subir"/>
             </form>
         )
     }
@@ -83,7 +107,7 @@ const EditPage = () => {
 
     return (
         <div>
-            {nombre != '' ? chargeForm() : throwError()}
+            {nombre == null ? throwError() : chargeForm()}
         </div>
     )
 }

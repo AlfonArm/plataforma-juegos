@@ -10,8 +10,7 @@ const newPage = () => {
             if ((pointer == null)||(typeof pointer !== 'string')||(pointer.length == 0)) {
                 document.getElementById('return_genero').innerHTML= 'Debe insertar un valor válido';
             } else {
-                const requestPost = { nombre: pointer}
-                const result = createData('/generos', {requestPost});
+                const result = createData('/generos', {name: pointer});
                 if ((typeof result === 'number')&&(result == 200)) {
                     alert ('Se creó el género con éxito. Redirigiendo a la página inicial')
                     window.location.replace('/generos');
