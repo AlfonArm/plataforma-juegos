@@ -6,53 +6,72 @@ import not_found from '../../styles/not_found.png'
 const EditPage = () => {
     const genderId = getCurrentURL().match(/\/(\d+)$/)[1];
     const [generos, setGeneros] = useState();
-
-    useEffect (() => {
-        if (!generos) getGeneros()
-        }, []);
-    
-    const getGeneros = async () => {
-        try {
-            const data = await fetchUserData('/generos');
-            if (data) {
-                setGeneros(data);
-            }
-        } catch (e) {
-            setError(err + '\n' + e)
-        }
-    }
-
     const [nombre, setName] = useState();
     const [err, setError] = useState();
 
-    useEffect(() => setName(exists(generos)))
-
-    function exists (a) {
+    try {
+        useEffect (() => {
+            if (!generos) getGeneros()
+            }, []);
+    } catch (e) {
+        setGeneros([])
+        setError (e.message)
+    }
+    
+    const getGeneros = async () => {
+        let noEntrar = false;
+        let response;
         try {
-                if ((a)&&(Array.isArray(a))) {
-                    let existe = false;
-                    let i = 0;
-                    while ((!existe)&&(a.length > i)) {
-                        i++;
-                        if (i in a) {
-                            if (a[i].id == genderId) {
-                                existe = true;
-                                if (typeof a[i].nombre === 'string') console.log('encontre'+a[i].nombre+' en '+a[i].id)
-                            }
+            response = await fetchUserData('/generos');
+        } catch (e) {
+            noEntrar = true;
+            setError (e.message)
+        }
+        if (!noEntrar) {
+            if (('status' in response) && ('statusText' in response)) {
+                if ((response.status >= 200)&&(response.status < 300)) {
+                    setGeneros(response.data);
+                    // no sé por qué no se sube, pero tampoco me importa mucho tener ese dato!
+                    setName(exists(response.data))
+                } else {
+                    throw new Error (response.status + ': ' + response.statusText)
+                }
+            } else {
+                throw new Error ('No hubo respuesta')
+            }
+        }
+    }
+
+
+
+    function exists (generos) {
+        try {
+            console.log(generos)
+            console.log(Array.isArray(generos))
+            console.log()
+            if ((generos)&&(Array.isArray(generos))) {
+                let existe = false;
+                let i = 0;
+                while ((!existe)&&(generos.length > i)) {
+                    i++;
+                    if (i in generos) {
+                        if (generos[i].id == genderId) {
+                            existe = true;
+                            if (typeof generos[i].nombre === 'string') console.log('encontre '+generos[i].nombre+' en '+generos[i].id)
                         }
                     }
-                    if ((i in a)&&(typeof a[i].nombre === 'string')&&(existe)) {
-                        return a[i].nombre
-                    } else {
-                        setError ('El elemento no existe');
-                        }
-                } else {
-                    setError('No hay datos guardados');
                 }
+                if ((i in generos)&&(typeof generos[i].nombre === 'string')&&(existe)) {
+                    return generos[i].nombre
+                } else {
+                    setError ('El elemento no existe');
+                    }
+            } else {
+                setError('No hay datos guardados');
+            }
         } catch (er) {
-            // dado que no hay una funcionalidad para tomar un solo elemento, no va a devolver un error de base de datos salvo que no haya datos o algo así. Habría que poner que
-            // devuelva 404 en todo caso.
-            setError(er);
+            console.log(er)
+            setError(er.message);
         }
     }
 
@@ -81,8 +100,7 @@ const EditPage = () => {
                 <div className = "flex"> 
                     <fieldset>
                         <legend>Nombre</legend>
-                        <p>Nombre anterior: {nombre}</p>
-                        <input placeholder="Nombre del género" id = "nombre_genero" type='text'/>
+                        <input placeholder="Nombre del género" id = "nombre_genero" type='text' value={(nombre) => setName(nombre)}/>
                         <p id = "return_genero"></p>
                     </fieldset>
                 </div>
