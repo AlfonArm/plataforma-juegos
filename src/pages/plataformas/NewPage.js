@@ -33,7 +33,7 @@ const newPage = () => {
     }
 
     return (
-        <div>
+        <div  className='tamaño_minimo'>
             <form className="cuadro form_chiquito">
                 <div className = "top_form">
                     <p>Completa:</p>

@@ -114,7 +114,7 @@ const Dashboard = () => {
         return (
             datos.map((element) => {
                 return(
-                    <div className = 'bloque_info' key = {element.id}>
+                    <div className = 'bloque_info tamaño_minimo' key = {element.id}>
                         <img className='reducir_img' src={"data:"+element.tipo_imagen+";charset=utf8;base64,"+element.imagen}/>
                         <div className = 'info_right'>
                             <p className = 'boldeable'>{element.nombre}</p>

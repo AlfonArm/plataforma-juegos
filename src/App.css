@@ -346,3 +346,7 @@ header select {
 	margin: auto;
 	margin-top: 10px
 }
+
+.tamaño_minimo {
+	min-height: 600px;
+}
