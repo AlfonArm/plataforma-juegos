@@ -15,8 +15,8 @@ const newPage = () => {
         window.location.replace('/generos');
     }
 
-    function fracaso () {
-        document.getElementById('return_genero').innerHTML= 'Hubo un error. Intente otra vez';
+    function fracaso (cod, text) {
+        document.getElementById('return_genero').innerHTML= 'Hubo un error: ' + cod + ': ' + text;
     }
 
     async function subir () {
@@ -26,7 +26,9 @@ const newPage = () => {
                 document.getElementById('return_genero').innerHTML= 'Debe insertar un valor válido';
             } else {
                 const result = await Upload(pointer);
-                result.then (exito, fracaso)
+                console.log (result)
+                if ((result.status >= 200)&&(result.status < 300)) exito()
+                else fracaso(result.status, result.statusText)
             }
         } catch (er) {
             console.log(er)

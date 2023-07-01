@@ -10,19 +10,43 @@ const Generos = () => {
     const [agregar, setAgregar] = useState();
     const [erro, setError] = useState("")
 
+    try {
     useEffect (() => {
         if (!generos) getGeneros()
         }, []);
+    } catch (e) {
+        setGeneros([])
+        setError (erro + '. ' + e.message)
+        console.log ('Agarré el error: ' + e.message)
+    }
     
     const getGeneros = async () => {
+        let noEntrar = false;
+        let response;
         try {
-            const data = await fetchUserData('/generos');
-            if (data) {
-                setGeneros(data);
-            }
+            response = await fetchUserData('/generos');
         } catch (e) {
-            setError(erro + '\n' + e)
+            noEntrar = true;
+            console.log('Encontre ' + e.message)
+            setError (e.message)
         }
+        if (!noEntrar) {
+            if (('status' in response) && ('statusText' in response)) {
+                if ((response.status >= 200)&&(response.status < 300)) {
+                    setGeneros(response.data);
+                } else {
+                    throw new Error (response.status + ': ' + response.statusText)
+                }
+            } else {
+                throw new Error ('No hubo respuesta')
+            }
+        }
+    }
+
+    const showError = () => {
+        return (
+            <p>{erro}</p>
+        )
     }
 
     // lo que devuelve si la lista está vacía (implementar poner un error de ser necesario)
@@ -30,6 +54,7 @@ const Generos = () => {
         return (
             <div>
                 <p>No hay generos</p>
+                {erro ? showError () : null}
             </div>
         )
     }
@@ -47,8 +72,7 @@ const Generos = () => {
         try {
             const result = deleteUserData('/generos/'+id);
             getGeneros()
-            const promesa = await result.then()
-            if ((promesa.status >= 200)&&(promesa.status<300)) exito(); else fracaso(promesa.status, promesa.statusText)
+            if ((result.status >= 200)&&(result.status<300)) exito(); else fracaso(result.status, result.statusText)
         } catch (error) {
             alert (error);
         }
@@ -60,7 +84,7 @@ const Generos = () => {
             <div>
                 <img className='access_form' src={form} onClick={() => window.location.replace('./generos/new')}/>
                 <div className='mostrar_gen_plat lista'>
-                    {((Array.isArray(generos))&&(generos.length > 0)) ?
+                    {((Array.isArray(generos))&&(generos.length > 0)&&(erro == "")) ?
                         generos.map ( (genero) => {
                             return (
                                 <div key={genero.id} className='genplat'>

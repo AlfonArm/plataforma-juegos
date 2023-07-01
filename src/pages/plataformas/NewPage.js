@@ -24,7 +24,8 @@ const newPage = () => {
                 document.getElementById('return_plataforma').innerHTML= 'Debe insertar un valor válido';
             } else {
                 const result = await Upload(pointer);
-                result.then (exito, fracaso)
+                if ((result.status >= 200)&&(result.status < 300)) exito()
+                else fracaso(result.status, result.statusText)
             }
         } catch (er) {
             console.log(er)

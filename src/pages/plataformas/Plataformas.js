@@ -47,8 +47,7 @@ const Plataformas = () => {
         try {
             const result = deleteUserData('/plataformas/'+id);
             getPlataformas()
-            const promesa = await result.then()
-            if ((promesa.status >= 200)&&(promesa.status<300)) exito(); else fracaso(promesa.status, promesa.statusText)
+            if ((result.status >= 200)&&(result.status<300)) exito(); else fracaso(result.status, result.statusText)
         } catch (error) {
             alert (error);
         }
