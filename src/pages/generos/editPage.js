@@ -5,20 +5,18 @@ import not_found from '../../styles/not_found.png'
 
 const EditPage = () => {
     const genderId = getCurrentURL().match(/\/(\d+)$/)[1];
-    const [generos, setGeneros] = useState();
     const [nombre, setName] = useState();
     const [err, setError] = useState();
 
     try {
         useEffect (() => {
-            if (!generos) getGeneros()
+            if (!nombre) conseguirNombre()
             }, []);
     } catch (e) {
-        setGeneros([])
         setError (e.message)
     }
-    
-    const getGeneros = async () => {
+
+    const conseguirNombre = async () => {
         let noEntrar = false;
         let response;
         try {
@@ -30,8 +28,6 @@ const EditPage = () => {
         if (!noEntrar) {
             if (('status' in response) && ('statusText' in response)) {
                 if ((response.status >= 200)&&(response.status < 300)) {
-                    setGeneros(response.data);
-                    // no sé por qué no se sube, pero tampoco me importa mucho tener ese dato!
                     setName(exists(response.data))
                 } else {
                     throw new Error (response.status + ': ' + response.statusText)
@@ -82,7 +78,7 @@ const EditPage = () => {
             } else {
                 try {
                     const result = modifyUserData('/generos/'+genderId, {name: document.getElementById('nombre_genero').value});
-                    alert('Se ha editado')
+                    alert('Se ha editado a '  + nombre)
                     window.location.replace('/generos');
                 } catch (er) {
                     alert (er);
@@ -100,7 +96,7 @@ const EditPage = () => {
                 <div className = "flex"> 
                     <fieldset>
                         <legend>Nombre</legend>
-                        <input placeholder="Nombre del género" id = "nombre_genero" type='text' value={(nombre) => setName(nombre)}/>
+                        <input placeholder="Nombre del género" id = "nombre_genero" type='text' value={nombre} onChange={(e) => setName(e.target.value)}/>
                         <p id = "return_genero"></p>
                     </fieldset>
                 </div>
