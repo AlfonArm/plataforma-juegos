@@ -47,7 +47,7 @@ const EditPage = () => {
             console.log()
             if ((plataformas)&&(Array.isArray(plataformas))) {
                 let existe = false;
-                let i = 0;
+                let i = -1;
                 while ((!existe)&&(plataformas.length > i)) {
                     i++;
                     if (i in plataformas) {

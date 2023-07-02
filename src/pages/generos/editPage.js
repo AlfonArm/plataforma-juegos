@@ -47,7 +47,7 @@ const EditPage = () => {
             console.log()
             if ((generos)&&(Array.isArray(generos))) {
                 let existe = false;
-                let i = 0;
+                let i = -1; // sino no lee el elemento 0 :P
                 while ((!existe)&&(generos.length > i)) {
                     i++;
                     if (i in generos) {
