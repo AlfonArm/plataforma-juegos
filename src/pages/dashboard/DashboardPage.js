@@ -3,9 +3,7 @@ import {fetchUserData} from "../../axios/fetchUserData";
 // imágenes
 import ascending from "../../styles/ascending.png"
 import descending from "../../styles/descending.png"
-import form from "../../styles/form.png"
 import not_found from "../../styles/not_found.png"
-import delet from "../../styles/delete.png"
 
 
 

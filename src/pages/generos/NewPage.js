@@ -1,7 +1,5 @@
 import createData from '../../axios/createData';
 
-
-
 const newPage = () => {
 
     const Upload = async (pointer) => {
@@ -26,9 +24,17 @@ const newPage = () => {
                 document.getElementById('return_genero').innerHTML= 'Debe insertar un valor válido';
             } else {
                 const result = await Upload(pointer);
-                console.log (result)
-                if ((result.status >= 200)&&(result.status < 300)) exito()
-                else fracaso(result.status, result.statusText)
+                if (result) {
+                    if ('status' in result) {
+                        if ((result.status >= 200)&&(result.status < 300)) exito()
+                        else fracaso(result.status, result.statusText)
+                    } else {
+                        fracaso(502, 'Respuesta inválida/no hay respuesta'); // si no tengo código, asumo que fue cosa del servidor. No hay otra forma de avisarme :P
+                    }
+                } else {
+                    console.log(result);
+                    fracaso(504, 'El tiempo para recibir respuestas ha acabado sin una clara');
+                }
             }
         } catch (er) {
             console.log(er)
