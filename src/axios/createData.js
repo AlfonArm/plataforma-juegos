@@ -10,7 +10,7 @@ const createData = async (page, request) => {
             }, 1000);
         })
     } catch (e) {       
-        return e;     
+        return (e.message);
     }   
 };
 

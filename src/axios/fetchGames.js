@@ -11,6 +11,6 @@ export const fetchGames = async (page, nombre, genero, plataforma, orden) => {
             }, 1000);
         })
     } catch (e) {
-        console.log(e)
+        return (e.message);
     }
 }

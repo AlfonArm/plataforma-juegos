@@ -24,16 +24,15 @@ const newPage = () => {
                 document.getElementById('return_genero').innerHTML= 'Debe insertar un valor válido';
             } else {
                 const result = await Upload(pointer);
-                if (result) {
+                if (typeof result === 'string') {
+                    throw new Error (result);
+                } else {
                     if ('status' in result) {
                         if ((result.status >= 200)&&(result.status < 300)) exito()
                         else fracaso(result.status, result.statusText)
                     } else {
-                        fracaso(502, 'Respuesta inválida/no hay respuesta'); // si no tengo código, asumo que fue cosa del servidor. No hay otra forma de avisarme :P
+                        fracaso(502, 'Respuesta inválida/no hay respuesta');
                     }
-                } else {
-                    console.log(result);
-                    fracaso(504, 'El tiempo para recibir respuestas ha acabado sin una clara');
                 }
             }
         } catch (er) {

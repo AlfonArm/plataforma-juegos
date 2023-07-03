@@ -17,24 +17,24 @@ const EditPage = () => {
     }
 
     const conseguirNombre = async () => {
-        let noEntrar = false;
         let response;
         try {
             response = await fetchUserData('/generos');
-        } catch (e) {
-            noEntrar = true;
-            setError (e.message)
-        }
-        if (!noEntrar) {
-            if (('status' in response) && ('statusText' in response)) {
-                if ((response.status >= 200)&&(response.status < 300)) {
-                    setName(exists(response.data))
-                } else {
-                    throw new Error (response.status + ': ' + response.statusText)
-                }
+            if (typeof response === 'string') {
+                throw new Error (response);
             } else {
-                throw new Error ('No hubo respuesta')
+                if (('status' in response) && ('statusText' in response)) {
+                    if ((response.status >= 200)&&(response.status < 300)) {
+                        setName(exists(response.data))
+                    } else {
+                        throw new Error (response.status + ': ' + response.statusText)
+                    }
+                } else {
+                    throw new Error ('No hubo respuesta')
+                }
             }
+        } catch (e) {
+            setError (e.message)
         }
     }
 
@@ -71,15 +71,27 @@ const EditPage = () => {
         }
     }
 
-    function editar () {
+    async function editar () {
         if (typeof document.getElementById('nombre_genero').value === 'string') {
             if ((document.getElementById('nombre_genero').value == null)||(document.getElementById('nombre_genero').value.length == 0)) {
                 document.getElementById('return_genero').innerHTML = 'Debe insertar un valor válido';
             } else {
                 try {
-                    const result = modifyUserData('/generos/'+genderId, {name: document.getElementById('nombre_genero').value});
-                    alert('Se ha editado a '  + nombre)
-                    window.location.replace('/generos');
+                    const result = await modifyUserData('/generos/'+genderId, {name: document.getElementById('nombre_genero').value});
+                    if (typeof result === 'string') {
+                        throw new Error ('result');
+                    } else {
+                        if (result && ('status' in result)) {
+                            if ((result.status >= 200)&&(result.status < 300)) {
+                                alert('Se ha editado a '  + nombre)
+                                window.location.replace('/generos');
+                            } else {
+                                alert ('Error: ' + result.status + '. ' + result.statusText);
+                            }
+                        } else {
+                            alert ('Error desconocido en la recepción de la respuesta');
+                        }
+                    }
                 } catch (er) {
                     alert (er);
                 }

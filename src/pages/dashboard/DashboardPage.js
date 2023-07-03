@@ -32,28 +32,24 @@ const Dashboard = () => {
     }
     
     const getGeneros = async () => {
-        let noEntrar = false;
         let response;
         try {
             response = await fetchUserData('/generos');
-        } catch (e) {
-            noEntrar = true;
-            setError (e.message)
-        }
-        if (!noEntrar) {
-            if (response) {
+            if (typeof response === 'string') {
+                throw new Error (response);
+            } else {
                 if (('status' in response) && ('statusText' in response)) {
                     if ((response.status >= 200)&&(response.status < 300)) {
                         setGeneros(response.data);
                     } else {
-                        throw new Error (response.status + ': ' + response.statusText + '. ')
+                        throw new Error (response.status + ': ' + response.statusText)
                     }
                 } else {
-                    throw new Error ('502: Respuesta inválida/no hay respuesta')
+                    throw new Error ('No hubo respuesta')
                 }
-            } else {
-                throw new Error ('504: El tiempo para recibir respuestas ha acabado sin una clara')
             }
+        } catch (e) {
+            setError (e.message)
         }
     }
 
@@ -67,29 +63,24 @@ const Dashboard = () => {
     }
     
     const getPlataformas = async () => {
-        let noEntrar = false;
         let response;
         try {
             response = await fetchUserData('/plataformas');
-        } catch (e) {
-            noEntrar = true;
-            setError (e.message)
-        }
-        if (!noEntrar) {
-            if (response) {
+            if (typeof response === 'string') {
+                throw new Error (response);
+            } else {
                 if (('status' in response) && ('statusText' in response)) {
                     if ((response.status >= 200)&&(response.status < 300)) {
-                        setPlataformas(response.data);
+                        setPlataformas(response.data)
                     } else {
-                        throw new Error (response.status + ': ' + response.statusText + '. ')
+                        throw new Error (response.status + ': ' + response.statusText)
                     }
                 } else {
-                    throw new Error ('502: Respuesta inválida/no hay respuesta')
+                    throw new Error ('No hubo respuesta')
                 }
-            } else {
-                throw new Error ('504: El tiempo para recibir respuestas ha acabado sin una clara')
             }
-            
+        } catch (e) {
+            setError (e.message)
         }
     }
 
@@ -103,16 +94,12 @@ const Dashboard = () => {
     }
     
     const getJuegos = async () => {
-        let noEntrar = false;
         let response;
         try {
-            response = await fetchGames('/juegoss', {name: nombre, idGender: genero, idPlataform: plataforma, ascending: orden == 'ascending'});
-        } catch (e) {
-            noEntrar = true;
-            setError (e.message)
-        }
-        if (!noEntrar) {
-            if (response) {
+            response = await fetchGames('/juegos', {name: nombre, idGender: genero, idPlataform: plataforma, ascending: orden == 'ascending'}); // por alguna extraña razón, usando un módulo a parte funciona
+            if (typeof response === 'string') {
+                throw new Error (response);
+            } else {
                 if (('status' in response) && ('statusText' in response)) {
                     if ((response.status >= 200)&&(response.status < 300)) {
                         setDatos(response.data);
@@ -122,9 +109,9 @@ const Dashboard = () => {
                 } else {
                     throw new Error ('502: Respuesta inválida/no hay respuesta')
                 }
-            } else {
-                throw new Error ('504: El tiempo para recibir respuestas ha acabado sin una clara')
             }
+        } catch (e) {
+            setError (e.message)
         }
     }
 

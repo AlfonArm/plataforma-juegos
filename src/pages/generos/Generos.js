@@ -19,24 +19,24 @@ const Generos = () => {
     }
     
     const getGeneros = async () => {
-        let noEntrar = false;
         let response;
         try {
             response = await fetchUserData('/generos');
-        } catch (e) {
-            noEntrar = true;
-            setError (e.message)
-        }
-        if (!noEntrar) {
-            if (('status' in response) && ('statusText' in response)) {
-                if ((response.status >= 200)&&(response.status < 300)) {
-                    setGeneros(response.data);
-                } else {
-                    throw new Error (response.status + ': ' + response.statusText)
-                }
+            if (typeof response === 'string') {
+                throw new Error (response);
             } else {
-                throw new Error ('No hubo respuesta')
+                if (('status' in response) && ('statusText' in response)) {
+                    if ((response.status >= 200)&&(response.status < 300)) {
+                        setGeneros(response.data);
+                    } else {
+                        throw new Error (response.status + ': ' + response.statusText)
+                    }
+                } else {
+                    throw new Error ('No hubo respuesta')
+                }
             }
+        } catch (e) {
+            setError (e.message)
         }
     }
 
@@ -58,18 +58,12 @@ const Generos = () => {
 
     // función de borrado
     async function checkDependiencesAndPopUp (id) {
-        let noEntrar = false;
         let response;
         try {
             response = await deleteUserData('/generos/'+id);
-        } catch (e) {
-            noEntrar = true;
-            let dependencia = '.'
-            if (e.response && e.response.status === 400) dependencia = '. Probablemente el dato está siendo usado por un juego'
-            alert ('Error: ' + e.message + dependencia)
-        }
-        try {
-            if (!noEntrar) {
+            if (typeof response === 'string') {
+                throw new Error (response);
+            } else {
                 if (('status' in response) && ('statusText' in response)) {
                     if ((response.status >= 200)&&(response.status < 300)) {
                         alert ('Se ha borrado exitosamente');
@@ -82,7 +76,9 @@ const Generos = () => {
                 }
             }
         } catch (e) {
-            alert ('Hubo un error: ' + e.message)
+            let dependencia = '.'
+            if (e.response && e.response.status === 400) dependencia = '. Probablemente el dato está siendo usado por un juego'
+            alert ('Error: ' + e.message + dependencia)
         }
     }
 

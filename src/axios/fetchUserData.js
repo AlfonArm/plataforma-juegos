@@ -10,6 +10,6 @@ export const fetchUserData = async (page, request) => {
             }, 1000);
         })
     } catch (e) {
-        console.log(e)
+        return (e.message);
     }
 }

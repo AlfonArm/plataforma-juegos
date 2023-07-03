@@ -17,24 +17,24 @@ const EditPage = () => {
     }
 
     const conseguirNombre = async () => {
-        let noEntrar = false;
         let response;
         try {
             response = await fetchUserData('/plataformas');
-        } catch (e) {
-            noEntrar = true;
-            setError (e.message)
-        }
-        if (!noEntrar) {
-            if (('status' in response) && ('statusText' in response)) {
-                if ((response.status >= 200)&&(response.status < 300)) {
-                    setName(exists(response.data))
-                } else {
-                    throw new Error (response.status + ': ' + response.statusText)
-                }
+            if (typeof response === 'string') {
+                throw new Error (response);
             } else {
-                throw new Error ('No hubo respuesta')
+                if (('status' in response) && ('statusText' in response)) {
+                    if ((response.status >= 200)&&(response.status < 300)) {
+                        setName(exists(response.data))
+                    } else {
+                        throw new Error (response.status + ': ' + response.statusText)
+                    }
+                } else {
+                    throw new Error ('No hubo respuesta')
+                }
             }
+        } catch (e) {
+            setError (e.message)
         }
     }
 
@@ -71,17 +71,30 @@ const EditPage = () => {
         }
     }
 
-    function editar () {
+    async function editar () {
         if (typeof document.getElementById('nombre_plataforma').value === 'string') {
             if ((document.getElementById('nombre_plataforma').value == null)||(document.getElementById('nombre_plataforma').value.length == 0)) {
                 document.getElementById('return_plataforma').innerHTML = 'Debe insertar un valor válido';
             } else {
                 try {
-                    const result = modifyUserData('/plataformas/'+platId, {name: document.getElementById('nombre_plataforma').value});
-                    alert('Se ha editado a ' + nombre)
-                    window.location.replace('/plataformas');
-                } catch (er) {
-                    alert (er);
+                    const result = await modifyUserData('/plataformas/'+platId, {name: document.getElementById('nombre_plataforma').value});
+                    if (typeof result === 'string') {
+                        throw new Error ('result');
+                    } else {
+                        if (result && ('status' in result)) {
+                            if ((result.status >= 200)&&(result.status < 300)) {
+                                alert('Se ha editado a '  + nombre)
+                                window.location.replace('/plataformas');
+                            } else {
+                                alert ('Error: ' + result.status + '. ' + result.statusText);
+                            }
+                        } else {
+                            console.log(result)
+                            alert ('Error desconocido en la recepción de la respuesta');
+                        }
+                    }
+                } catch (e) {
+                    alert (e);
                 }
             }
         }

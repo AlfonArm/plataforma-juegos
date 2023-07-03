@@ -19,24 +19,24 @@ const Plataformas = () => {
     }
 
     const getPlataformas = async () => {
-        let noEntrar = false;
         let response;
         try {
             response = await fetchUserData('/plataformas');
-        } catch (e) {
-            noEntrar = true;
-            setError (e.message)
-        }
-        if (!noEntrar) {
-            if (('status' in response) && ('statusText' in response)) {
-                if ((response.status >= 200)&&(response.status < 300)) {
-                    setPlataformas(response.data);
-                } else {
-                    throw new Error (response.status + ': ' + response.statusText)
-                }
+            if (typeof response === 'string') {
+                throw new Error (response);
             } else {
-                throw new Error ('No hubo respuesta')
+                if (('status' in response) && ('statusText' in response)) {
+                    if ((response.status >= 200)&&(response.status < 300)) {
+                        setPlataformas(response.data)
+                    } else {
+                        throw new Error (response.status + ': ' + response.statusText)
+                    }
+                } else {
+                    throw new Error ('No hubo respuesta')
+                }
             }
+        } catch (e) {
+            setError (e.message)
         }
     }
 
@@ -70,15 +70,17 @@ const Plataformas = () => {
         }
         try {
             if (!noEntrar) {
-                if (('status' in response) && ('statusText' in response)) {
-                    if ((response.status >= 200)&&(response.status < 300)) {
-                        alert ('Se ha borrado exitosamente');
-                        getPlataformas()
+                if (response) {
+                    if (('status' in response) && ('statusText' in response)) {
+                        if ((response.status >= 200)&&(response.status < 300)) {
+                            alert ('Se ha borrado exitosamente');
+                            getPlataformas()
+                        } else {
+                            alert ('Hubo un error: ' + response.status + ': ' + response.statusText)
+                        }
                     } else {
-                        alert ('Hubo un error: ' + response.status + ': ' + response.statusText)
+                        alert ('No hubo respuesta')
                     }
-                } else {
-                    alert ('No hubo respuesta')
                 }
             }
         } catch (e) {
