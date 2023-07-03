@@ -1,5 +1,6 @@
 import {useState, useEffect} from 'react';
 import {fetchUserData} from "../../axios/fetchUserData";
+import { fetchGames } from '../../axios/fetchGames';
 // imágenes
 import ascending from "../../styles/ascending.png"
 import descending from "../../styles/descending.png"
@@ -20,68 +21,119 @@ const Dashboard = () => {
     const [orden, setOrder] = useState("ascending");
     // almacenamiento de error
     const [erro, setError] = useState("")
-    const [platEr, setPlater] = useState((Array.isArray(plataformas))&&(plataformas.length > 0))
-    const [genEr, setGener] = useState((Array.isArray(generos))&&(generos.length > 0))
 
+    try {
     useEffect (() => {
         if (!generos) getGeneros()
         }, []);
+    } catch (e) {
+        setGeneros([])
+        setError (erro + e.message)
+    }
+    
+    const getGeneros = async () => {
+        let noEntrar = false;
+        let response;
+        try {
+            response = await fetchUserData('/generos');
+        } catch (e) {
+            noEntrar = true;
+            setError (e.message)
+        }
+        if (!noEntrar) {
+            if (response) {
+                if (('status' in response) && ('statusText' in response)) {
+                    if ((response.status >= 200)&&(response.status < 300)) {
+                        setGeneros(response.data);
+                    } else {
+                        throw new Error (response.status + ': ' + response.statusText + '. ')
+                    }
+                } else {
+                    throw new Error ('502: Respuesta inválida/no hay respuesta')
+                }
+            } else {
+                throw new Error ('504: El tiempo para recibir respuestas ha acabado sin una clara')
+            }
+        }
+    }
 
+    try {
     useEffect (() => {
         if (!plataformas) getPlataformas()
         }, []);
+    } catch (e) {
+        setPlataformas([])
+        setError (erro + e.message)
+    }
+    
+    const getPlataformas = async () => {
+        let noEntrar = false;
+        let response;
+        try {
+            response = await fetchUserData('/plataformas');
+        } catch (e) {
+            noEntrar = true;
+            setError (e.message)
+        }
+        if (!noEntrar) {
+            if (response) {
+                if (('status' in response) && ('statusText' in response)) {
+                    if ((response.status >= 200)&&(response.status < 300)) {
+                        setPlataformas(response.data);
+                    } else {
+                        throw new Error (response.status + ': ' + response.statusText + '. ')
+                    }
+                } else {
+                    throw new Error ('502: Respuesta inválida/no hay respuesta')
+                }
+            } else {
+                throw new Error ('504: El tiempo para recibir respuestas ha acabado sin una clara')
+            }
+            
+        }
+    }
 
+    try {
     useEffect (() => {
         getJuegos()
-        }, [nombre, plataforma, genero, orden]);
-
-    useEffect (() => {
-        checkErrorResolution()
-        }, [datos, plataformas, generos]);
-
-    const getGeneros = async () => {
-        try {
-            const data = await fetchUserData('/generos');
-            if (data) {
-
-                setGeneros(data);
-            }
-        } catch (e) {
-            setError(erro + '\n' + e)
-        }
+        }, [nombre, genero, plataforma, orden]);
+    } catch (e) {
+        setDatos([])
+        setError (erro + e.message)
     }
-
-    const getPlataformas = async () => {
-        try {
-            const data = await fetchUserData('/plataformas');
-            if (data) {
-                setPlataformas(data);
-            }
-        } catch (e) {
-            setError(erro +'\n'+ e)
-        }
-        
-    }
-
+    
     const getJuegos = async () => {
+        let noEntrar = false;
+        let response;
         try {
-            const data = await fetchUserData('/juegos', {name: nombre, idPlataform: plataforma, idGender: genero, ascending: orden == 'ascending'});
-            if (data) {
-                setDatos(data);
-            }
+            response = await fetchGames('/juegoss', {name: nombre, idGender: genero, idPlataform: plataforma, ascending: orden == 'ascending'});
         } catch (e) {
-            setError(erro +'\n'+ e);
+            noEntrar = true;
+            setError (e.message)
+        }
+        if (!noEntrar) {
+            if (response) {
+                if (('status' in response) && ('statusText' in response)) {
+                    if ((response.status >= 200)&&(response.status < 300)) {
+                        setDatos(response.data);
+                    } else {
+                        throw new Error (response.status + ': ' + response.statusText + '. ')
+                    }
+                } else {
+                    throw new Error ('502: Respuesta inválida/no hay respuesta')
+                }
+            } else {
+                throw new Error ('504: El tiempo para recibir respuestas ha acabado sin una clara')
+            }
         }
     }
 
     const changeName = (newName) => {
         setName(newName);
-        console.log(nombre)
     };
 
     const changeGender = (newGender) => {
         setGender(newGender);
-        console.log(genero)
     };
     
     const changePlataform = (newPlataform) => {
@@ -97,9 +149,9 @@ const Dashboard = () => {
         try {
             let nombre = 'no disponible';
             if (Array.isArray(objeto)) {
-                let i = 1;
+                let i = 0;
                 while (nombre == 'no disponible') {
-                    if (objeto[i].id == id) nombre = objeto[i].nombre; 
+                    if ((i in objeto)&&('id' in objeto[i])&&(objeto[i].id == id)) nombre = objeto[i].nombre; 
                     i++;
                 }
             }
@@ -127,20 +179,13 @@ const Dashboard = () => {
         )
     }
 
-    function checkErrorResolution () {
-        let plat_error = "";
-        let gen_error = ""
-        if (platEr) plat_error = 'No se han podido cargar los géneros. '
-        if (genEr) gen_error = 'No se han podido cargar las plataformas. '
-        setError (erro + plat_error + gen_error)
-    }
-
     const notFound = () => {
         return (
             <div className= 'flex justify_center'>
                 <div>
                     <img src = {not_found} id = 'not_found'/>
                     <p>No se han encontrado resultados</p>
+                    {erro ? showError() : null}
                 </div>
             </div>
         )
@@ -190,8 +235,7 @@ const Dashboard = () => {
                     </div>
                 </div>
             </div>
-            <div className = "lista">
-                {erro ? showError() : null}
+            <div className = "lista tamaño_minimo">
                 {(Array.isArray(datos) && (datos.length > 0)) ? createList() : notFound()}
             </div>
         </div>
