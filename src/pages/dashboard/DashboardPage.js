@@ -188,17 +188,17 @@ const Dashboard = () => {
             <div className = "busqueda_header">
                 <div>
                     <label>Buscar:</label>
-                    <input type='text' onChange={(e) => changeName(e.changeName)}/>
+                    <input type='text' onChange={(e) => changeName(e.target.value)}/>
                 </div>
                 <div id = "info_busqueda" className = "busqueda_header">
                     <div>
                         <label>Género:</label>
-                        <select defaultValue={"not_valid"} id = "header_genero" onChange={() => changeGender(document.getElementById("header_genero").value)}>
-                            <option  value = "not_valid">Seleccionar género</option>
+                        <select defaultValue="" id = "header_genero" onChange={() => changeGender(document.getElementById("header_genero").value)}>
+                            <option  value = "">Seleccionar género</option>
                             {
                                 Array.isArray(generos) ? generos.map( (gen, genKey) => {
                                     return (
-                                        <option key={genKey} onChange={(e) => changeGender(gen.id)}>{gen.nombre}</option>
+                                        <option key={genKey} value = {gen.id}>{gen.nombre}</option>
                                     )
                                 }) : null
                             }
@@ -206,12 +206,12 @@ const Dashboard = () => {
                     </div>
                     <div>
                         <label>Plataforma:</label>
-                        <select defaultValue="not_valid" id = "header_plataforma" onChange={() => changePlataform(document.getElementById("header_plataforma").value)} >
-                            <option value = "not_valid">Seleccionar plataforma</option>
+                        <select defaultValue="" id = "header_plataforma" onChange={() => changePlataform(document.getElementById("header_plataforma").value)} >
+                            <option value = "">Seleccionar plataforma</option>
                             {
                                 Array.isArray(plataformas) ? plataformas.map( (plat, platKey) => {
                                     return (
-                                        <option key = {platKey}>{plat.nombre}</option>
+                                        <option key = {platKey} value = {plat.id}>{plat.nombre}</option>
                                     )
                                 }) : null
                             }

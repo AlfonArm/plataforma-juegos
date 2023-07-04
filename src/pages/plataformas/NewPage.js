@@ -36,7 +36,7 @@ const newPage = () => {
                 }
             }
         } catch (er) {
-            console.log(er)
+            document.getElementById("return_plataforma").innerHTML = er.message;
         }
     }
 
