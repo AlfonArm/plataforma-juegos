@@ -15,9 +15,9 @@ const Dashboard = () => {
     const [plataformas, setPlataformas] = useState();
     const [generos, setGeneros] = useState();
     // filtros
-    const [nombre, setName] = useState("");
-    const [plataforma, setPlataform] = useState("");
-    const [genero, setGender] = useState("");
+    const [nombre, setName] = useState();
+    const [plataforma, setPlataform] = useState();
+    const [genero, setGender] = useState();
     const [orden, setOrder] = useState("ascending");
     // almacenamiento de error
     const [erro, setError] = useState("")
@@ -96,7 +96,7 @@ const Dashboard = () => {
     const getJuegos = async () => {
         let response;
         try {
-            response = await fetchGames('/juegos', {name: nombre, idGender: genero, idPlataform: plataforma, ascending: orden == 'ascending'}); // por alguna extraña razón, usando un módulo a parte funciona
+            response = await fetchGames(nombre, genero, plataforma, orden == 'ascending'); // por alguna extraña razón, usando un módulo a parte funciona
             if (typeof response === 'string') {
                 throw new Error (response);
             } else {
