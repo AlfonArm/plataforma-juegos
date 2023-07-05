@@ -1,4 +1,5 @@
 import {useState, useEffect} from 'react';
+import { useNavigate } from 'react-router-dom';
 import {fetchUserData} from "../../axios/fetchUserData";
 import deleteUserData from '../../axios/deleteUserData'
 import form from '../../styles/form.png'
@@ -6,8 +7,9 @@ import delet from '../../styles/delete.png'
 
 const Generos = () => {
     const [generos, setGeneros] = useState();
-    const [agregar, setAgregar] = useState();
-    const [erro, setError] = useState("")
+    const [erro, setError] = useState("");
+
+    const navigate = useNavigate();
 
     try {
     useEffect (() => {
@@ -93,14 +95,14 @@ const Generos = () => {
     // cuerpo de página
     return (
             <div className='tamaño_minimo'>
-                <img className='access_form' src={form} onClick={() => window.location.replace('./generos/new')}/>
+                <img className='access_form' src={form} onClick={() => navigate('./new')}/>
                 <div className='mostrar_gen_plat lista'>
                     {((Array.isArray(generos))&&(generos.length > 0)&&(erro == "")) ?
                         generos.map ( (genero) => {
                             return (
                                 <div key={genero.id} className='genplat'>
                                     <img className='basura' src = {delet} onClick={() => deleteGen(genero.id)}/>
-                                    <img className='basura' src = {form} onClick={() => window.location.replace('/generos/edit/'+genero.id)}/>
+                                    <img className='basura' src = {form} onClick={() => navigate('./edit/'+genero.id)}/>
                                     <p>{genero.nombre}</p>
                                 </div>
                             )

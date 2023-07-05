@@ -1,4 +1,5 @@
 import {useState, useEffect} from 'react';
+import { useNavigate } from 'react-router-dom';
 import {fetchUserData} from "../../axios/fetchUserData";
 import deleteUserData from '../../axios/deleteUserData'
 import form from '../../styles/form.png'
@@ -6,8 +7,9 @@ import delet from '../../styles/delete.png'
 
 const Plataformas = () => {
     const [plataformas, setPlataformas] = useState();
-    const [agregar, setAgregar] = useState();
-    const [erro, setError] = useState("")
+    const [erro, setError] = useState("");
+
+    const navigate = useNavigate();
 
     try {
         useEffect (() => {
@@ -91,14 +93,14 @@ const Plataformas = () => {
     // cuerpo de página
     return (
         <div  className='tamaño_minimo'> 
-            <img className='access_form' src={form} onClick={() => window.location.replace('./plataformas/new')}/>
+            <img className='access_form' src={form} onClick={() => navigate('./new')}/>
             <div className='mostrar_gen_plat lista'>
                 {((Array.isArray(plataformas))&&(plataformas.length > 0)) ?
                     plataformas.map ( (plataforma) => {
                         return (
                             <div key={plataforma.id} className='genplat'>
                                 <img className='basura' src = {delet} onClick={() => checkDependiencesAndPopUp(plataforma.id)}/>
-                                <img className='basura' src = {form} onClick={() => window.location.replace('/plataformas/edit/'+plataforma.id)}/>
+                                <img className='basura' src = {form} onClick={() => navigate('./edit/'+plataforma.id)}/>
                                 <p>{plataforma.nombre}</p>
                             </div>
                         )

@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useRef} from 'react';
 import {fetchUserData} from "../../axios/fetchUserData";
 import { fetchGames } from '../../axios/fetchGames';
 // imágenes
@@ -21,6 +21,9 @@ const Dashboard = () => {
     const [orden, setOrder] = useState("ascending");
     // almacenamiento de error
     const [erro, setError] = useState("")
+
+    const genRef = useRef(null);
+    const platRef = useRef(null);
 
     try {
     useEffect (() => {
@@ -119,12 +122,12 @@ const Dashboard = () => {
         setName(newName);
     };
 
-    const changeGender = (newGender) => {
-        setGender(newGender);
+    const changeGender = () => {
+        setGender(genRef.current.value)
     };
     
-    const changePlataform = (newPlataform) => {
-        setPlataform(newPlataform);
+    const changePlataform = () => {
+        setPlataform(platRef.current.value)
     };
     
     const changeOrder = () => {
@@ -147,6 +150,7 @@ const Dashboard = () => {
             console.log (e);
         }
     }
+
     const createList = () => {
         return (
             datos.map((element) => {
@@ -183,6 +187,7 @@ const Dashboard = () => {
             <p>Error: {erro}</p>
         )
     }
+
     return (
         <div>
             <div className = "busqueda_header">
@@ -193,7 +198,7 @@ const Dashboard = () => {
                 <div id = "info_busqueda" className = "busqueda_header">
                     <div>
                         <label>Género:</label>
-                        <select defaultValue="" id = "header_genero" onChange={() => changeGender(document.getElementById("header_genero").value)}>
+                        <select defaultValue="" ref = {genRef} onChange={() => changeGender()}>
                             <option  value = "">Seleccionar género</option>
                             {
                                 Array.isArray(generos) ? generos.map( (gen, genKey) => {
@@ -206,7 +211,7 @@ const Dashboard = () => {
                     </div>
                     <div>
                         <label>Plataforma:</label>
-                        <select defaultValue="" id = "header_plataforma" onChange={() => changePlataform(document.getElementById("header_plataforma").value)} >
+                        <select defaultValue="" ref = {platRef} onChange={() => changePlataform()} >
                             <option value = "">Seleccionar plataforma</option>
                             {
                                 Array.isArray(plataformas) ? plataformas.map( (plat, platKey) => {

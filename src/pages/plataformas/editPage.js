@@ -1,12 +1,19 @@
-import react, {useState, useEffect} from 'react';
+import react, {useState, useEffect, useRef} from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import modifyUserData from '../../axios/modifyUserData'
 import {fetchUserData} from "../../axios/fetchUserData";
 import not_found from '../../styles/not_found.png'
 
 const EditPage = () => {
-    const platId = getCurrentURL().match(/\/(\d+)$/)[1];
     const [nombre, setName] = useState();
     const [err, setError] = useState();
+
+    const { id } = useParams();
+    const navigate = useNavigate();
+    const platId = id
+
+    const nombreRef = useRef(null);
+    const respuestaRef = useRef(null);
 
     try {
         useEffect (() => {
@@ -72,29 +79,30 @@ const EditPage = () => {
     }
 
     async function editar () {
-        if (typeof document.getElementById('nombre_plataforma').value === 'string') {
-            if ((document.getElementById('nombre_plataforma').value == null)||(document.getElementById('nombre_plataforma').value.length == 0)) {
-                document.getElementById('return_plataforma').innerHTML = 'Debe insertar un valor válido';
+        const nombre = nombreRef.current.value;
+        const respuesta = respuestaRef.current;
+        if (typeof nombre === 'string') {
+            if ((nombre == null)||(nombre.length == 0)) {
+                respuesta.textContent = 'Debe insertar un valor válido';
             } else {
                 try {
-                    const result = await modifyUserData('/plataformas/'+platId, {name: document.getElementById('nombre_plataforma').value});
+                    const result = await modifyUserData('/plataformas/'+platId, {name: nombre});
                     if (typeof result === 'string') {
-                        throw new Error ('result');
+                        throw new Error (result);
                     } else {
                         if (result && ('status' in result)) {
                             if ((result.status >= 200)&&(result.status < 300)) {
                                 alert('Se ha editado a '  + nombre)
-                                window.location.replace('/plataformas');
+                                navigate('/plataformas');
                             } else {
-                                alert ('Error: ' + result.status + '. ' + result.statusText);
+                                throw new Error ('Error: ' + result.status + '. ' + result.statusText);
                             }
                         } else {
-                            console.log(result)
-                            alert ('Error desconocido en la recepción de la respuesta');
+                            throw new Error ('Error desconocido en la recepción de la respuesta');
                         }
                     }
                 } catch (e) {
-                    alert (e);
+                    alert (e.message);
                 }
             }
         }
@@ -109,17 +117,13 @@ const EditPage = () => {
                 <div className = "flex"> 
                     <fieldset>
                         <legend>Nombre</legend>
-                        <input placeholder="Nombre del género" id = "nombre_plataforma" type='text' value={nombre} onChange={(e) => setName(e.target.value)}/>
-                        <p id = "return_plataforma"></p>
+                        <input placeholder="Nombre del género" ref = {nombreRef} type='text' value={nombre} onChange={(e) => setName(e.target.value)}/>
+                        <p ref = {respuestaRef}></p>
                     </fieldset>
                 </div>
                 <input type = "button" onClick={() => editar()} value="Subir"/>
             </form>
         )
-    }
-
-    function getCurrentURL () {
-        return window.location.href
     }
 
     const throwError = () => {

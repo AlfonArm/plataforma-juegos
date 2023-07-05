@@ -1,6 +1,11 @@
+import { useNavigate } from 'react-router-dom';
+import { useRef } from 'react';
 import createData from '../../axios/createData';
 
-const newPage = () => {
+const NewPage = () => {
+    const navigate = useNavigate();
+    const respuestaRef = useRef(null);
+    const nombreRef = useRef(null);
 
     const Upload = async (pointer) => {
         const result = await createData('/generos', {name: pointer});
@@ -8,35 +13,36 @@ const newPage = () => {
         return result
     }
 
-    function exito () {
-        alert ('Se creó el género con éxito. Redirigiendo a la página inicial...')
-        window.location.replace('/generos');
+    function Exito () {
+        alert ('Se creó el género con éxito. Redirigiendo a la página inicial...');
+        navigate('/generos');
     }
 
-    function fracaso (cod, text) {
-        document.getElementById('return_genero').innerHTML= 'Hubo un error: ' + cod + ': ' + text;
+    function fracaso (cod, text, respuesta) {
+        respuesta.textContent = 'Hubo un error: ' + cod + ': ' + text;
     }
 
-    async function subir () {
+    async function Subir () {
+        const nombre = nombreRef.current.value;
+        const respuesta = respuestaRef.current;
         try {
-            const pointer = document.getElementById("nombre_genero").value;
-            if ((pointer == null)||(typeof pointer !== 'string')||(pointer.length == 0)) {
-                document.getElementById('return_genero').innerHTML= 'Debe insertar un valor válido';
+            if ((nombre == null)||(typeof nombre !== 'string')||(nombre.length == 0)) {
+                respuesta.textContent = 'Debe insertar un valor válido';
             } else {
-                const result = await Upload(pointer);
+                const result = await Upload(nombre);
                 if (typeof result === 'string') {
                     throw new Error (result);
                 } else {
                     if ('status' in result) {
-                        if ((result.status >= 200)&&(result.status < 300)) exito()
-                        else fracaso(result.status, result.statusText)
+                        if ((result.status >= 200)&&(result.status < 300)) Exito()
+                        else fracaso(result.status, result.statusText, respuesta)
                     } else {
                         fracaso(502, 'Respuesta inválida/no hay respuesta');
                     }
                 }
             }
         } catch (er) {
-            document.getElementById("return_genero").innerHTML = er.message;
+            respuesta.textContent = er.message;
         }
     }
 
@@ -49,14 +55,14 @@ const newPage = () => {
                 <div className = "flex"> 
                     <fieldset>
                         <legend>Nombre</legend>
-                        <input placeholder="Nombre del género" id = "nombre_genero" type='text'/>
-                        <p id = "return_genero"></p>
+                        <input placeholder="Nombre del género" ref = {nombreRef} type='text'/>
+                        <p ref = {respuestaRef}></p>
                     </fieldset>
                 </div>
-                <input value = "Subir" type="button" className="centro" onClick={() => subir()}/>
+                <input value = "Subir" type="button" className="centro" onClick={() => Subir()}/>
             </form>
         </div>
     )
 }
 
-export default newPage
+export default NewPage
