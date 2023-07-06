@@ -25,12 +25,14 @@ const Dashboard = () => {
     const genRef = useRef(null);
     const platRef = useRef(null);
 
+    // respecto al punto opcional 1, dado cómo se fue modificando el programa, considero más oportuno utilizar useEffects separados porque, ante una falla de funcionamiento
+    // (que el programa podrá cazar en el mismo useEffect), se podrár reiniciar el dato de géneros o de plataformas y mandar un error particular.
     try {
     useEffect (() => {
         if (!generos) getGeneros()
         }, []);
     } catch (e) {
-        setGeneros([])
+        setGeneros([]) // por esto no lo edité, basicamente
         setError (erro + e.message)
     }
     

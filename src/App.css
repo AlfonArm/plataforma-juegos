@@ -233,6 +233,10 @@ footer p {
   width: 100%;
 }
 
+.dar_espacio {
+	margin: 50px
+}
+
 .centrar {
 	display: block;
 }

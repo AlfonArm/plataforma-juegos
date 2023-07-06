@@ -137,7 +137,7 @@ const EditPage = () => {
     }
 
     return (
-        <div  className='tamaño_minimo'>
+        <div  className='tamaño_minimo centrar dar_espacio'>
             {nombre == null ? throwError() : chargeForm()}
         </div>
     )
